@@ -22,6 +22,12 @@ function createInitialShips() {
         cx : 200,
         cy : 200
     });
+
+
+    entityManager.generateBrick({
+        cx : 200,
+        cy : 100
+    });
     
 }
 
@@ -109,7 +115,7 @@ function requestPreloads() {
         ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
-        brick   : "/images/brick.png",
+        brick   : "images/brick.png",
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

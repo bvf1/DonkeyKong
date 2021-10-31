@@ -28,6 +28,7 @@ var entityManager = {
 // "PRIVATE" DATA
 
 _ships   : [],
+_bricks  : [],
 
 
 // "PRIVATE" METHODS
@@ -50,7 +51,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._ships];
+    this._categories = [this._ships, this._bricks];
 },
 
 init: function() {
@@ -60,6 +61,9 @@ init: function() {
 
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
+},
+generateBrick : function(descr) {
+    this._bricks.push(new Brick(descr));
 },
 
 update: function(du) {
