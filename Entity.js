@@ -24,16 +24,16 @@ functions... shared data properties are potentially quite confusing.
 
 function Entity() {
 
-/*
+
     // Diagnostics to check inheritance stuff
     this._entityProperty = true;
     console.dir(this);
-*/
+
 
 };
 
 Entity.prototype.setup = function (descr) {
-
+console.log("fhoewjifeoifjoewjfieowin setup");
     // Apply all setup properies from the (optional) descriptor
     for (var property in descr) {
         this[property] = descr[property];
