@@ -25,6 +25,9 @@ function Brick(descr) {
     // Set normal drawing scale, and warp state off
     this._scale = 1;
 
+    this._width = this.sprite.width;
+    this._height = this.sprite.height;
+
     spatialManager.register(this);   
 
 };
@@ -54,8 +57,17 @@ Brick.prototype.update = function (du) {
 };
 
 Brick.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.9;
+        return (this.sprite.width / 2) * 0.9;
 };
+
+Brick.prototype.getSize = function() {
+    return { 
+        width : g_sprites.brick.width, 
+        height : g_sprites.brick.height
+    }
+
+};
+
 Brick.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
@@ -65,3 +77,4 @@ Brick.prototype.render = function (ctx) {
     );
     this.sprite.scale = origScale;
 };
+

@@ -33,7 +33,6 @@ function Entity() {
 };
 
 Entity.prototype.setup = function (descr) {
-console.log("fhoewjifeoifjoewjfieowin setup");
     // Apply all setup properies from the (optional) descriptor
     for (var property in descr) {
         this[property] = descr[property];

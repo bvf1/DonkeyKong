@@ -18,10 +18,11 @@ var g_ctx = g_canvas.getContext("2d");
 
 function createInitialObjects() {
 
-    entityManager.generateBrick({
+    /*entityManager.generateBrick({
         cx : 200,
         cy : 100
-    });
+    });*/
+    entityManager.makeWalkway();
     
 }
 
@@ -106,7 +107,7 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        brick   : "images/brick.png",
+        brick   : "images/1brick2.png",
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

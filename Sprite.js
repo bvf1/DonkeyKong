@@ -22,6 +22,7 @@ function Sprite(image) {
     this.scale = 1;
 }
 
+
 Sprite.prototype.drawAt = function (ctx, x, y) {
     ctx.drawImage(this.image, 
                   x, y);
@@ -71,3 +72,4 @@ Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation)
     this.drawCentredAt(ctx, cx, cy - sh, rotation);
     this.drawCentredAt(ctx, cx, cy + sh, rotation);
 };
+

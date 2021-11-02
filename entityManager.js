@@ -62,6 +62,64 @@ generateBrick : function(descr) {
     this._bricks.push(new Brick(descr));
 },
 
+makeWalkway : function() {
+    console.log("makewalkaway");
+    var size = Brick.prototype.getSize();
+
+    var startX = 0 + size.width;
+    var startY = 480;
+
+    // bottom 
+    for (var i = 0; i < g_canvas.width/size.width-1; i++) {
+        this.generateBrick({cx : startX, cy : startY});
+        startX += size.width;
+        if (i > 8 && i % 3 ==0) startY -= 3;
+    }
+
+    // Middle
+    // takes in width of brick x & y of where to start,
+        // length of floor, and wheter it should go up or down
+    this.makeFloor(size.width, 35, 400, 20, "+");
+    this.makeFloor(size.width, 90, 350, 20,"-");
+    this.makeFloor(size.width, 38, 260, 20,"+");
+    this.makeFloor(size.width, 91, 200, 20, "-");
+
+
+    // top
+    startX = 30;
+    startY = 130;
+    for (var i = 0; i < 20; i++) {
+        this.generateBrick({cx : startX, cy : startY});
+        startX += size.width;
+        if (i > 11 && i % 3 ==0) startY += 3;
+    }
+
+    startX = 170;
+    startY = 90; 
+    // where the princess is
+    for (var i = 0; i < 6; i++) {
+        this.generateBrick({cx : startX, cy: startY});
+        startX += size.width;
+    }
+    
+},
+    
+
+makeFloor : function(width, startX, startY, length ,c) {
+    console.log("start " + startX);
+    for (var i = 0; i < length; i++) {
+        this.generateBrick({cx : startX, cy : startY});
+        startX += width;
+        
+        if (i % 3 ==0) {
+            if (c ==="+")    startY += 3;
+            else             startY -= 3;
+        }
+    }
+            
+    
+},
+
 update: function(du) {
 
     for (var c = 0; c < this._categories.length; ++c) {
