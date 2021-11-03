@@ -29,6 +29,7 @@ var entityManager = {
 
 _bricks  : [],
 _ladders : [],
+_barrels : [],
 
 
 // "PRIVATE" METHODS
@@ -51,7 +52,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._ladders,this._bricks];
+    this._categories = [this._barrels,this._ladders,this._bricks];
 },
 
 init: function() {
@@ -65,6 +66,10 @@ generateBrick : function(descr) {
 
 generateLadder : function(descr) {
     this._ladders.push(new Ladder(descr));
+},
+
+generateBarrels : function(descr) {
+    this._barrels.push(new Barrels(descr));
 },
 
 makeWalkway : function() {
@@ -148,6 +153,12 @@ makeLadders : function() {
     this.generateLadder({cx : 260, cy : 124, height : 45});
     this.generateLadder({cx : 160, cy : 124, height : 150});
     this.generateLadder({cx : 130, cy : 124, height : 150});
+},
+
+makeBarrels : function() {
+    // Slapping on some static barrels
+    this.generateBarrels({cx : 40, cy : 589});
+
 },
 
 update: function(du) {

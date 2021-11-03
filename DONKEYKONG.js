@@ -24,6 +24,10 @@ function createInitialObjects() {
     });*/
     entityManager.makeWalkway();
     entityManager.makeLadders();
+
+    // Might change in the near future due to more saucy barrels 
+    // being added in the near future
+    entityManager.makeBarrels();
     
 }
 
@@ -109,7 +113,8 @@ function requestPreloads() {
 
     var requiredImages = {
         brick   : "images/1brick2.png",
-        ladder  : "images/ladder.png"
+        ladder  : "images/ladder.png",
+        barrels4 : "images/barrels4.png",
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -121,6 +126,7 @@ function preloadDone() {
 
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.ladder = new Sprite(g_images.ladder);
+    g_sprites.barrels4 = new Sprite(g_images.barrels4);
 
     entityManager.init();
     createInitialObjects();
