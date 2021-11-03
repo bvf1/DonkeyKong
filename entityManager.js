@@ -28,6 +28,7 @@ var entityManager = {
 // "PRIVATE" DATA
 
 _bricks  : [],
+_ladders : [],
 
 
 // "PRIVATE" METHODS
@@ -50,7 +51,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bricks];
+    this._categories = [this._ladders,this._bricks];
 },
 
 init: function() {
@@ -60,6 +61,10 @@ init: function() {
 
 generateBrick : function(descr) {
     this._bricks.push(new Brick(descr));
+},
+
+generateLadder : function(descr) {
+    this._ladders.push(new Ladder(descr));
 },
 
 makeWalkway : function() {
@@ -78,7 +83,7 @@ makeWalkway : function() {
 
     // Middle
     // takes in width of brick x & y of where to start,
-        // length of floor, and wheter it should go up or down
+        // length of floor, and whether it should go up or down
     this.makeFloor(size.width, 35, 400, 20, "+");
     this.makeFloor(size.width, 90, 350, 20,"-");
     this.makeFloor(size.width, 38, 260, 20,"+");
@@ -94,10 +99,10 @@ makeWalkway : function() {
         if (i > 11 && i % 3 ==0) startY += 3;
     }
 
-    startX = 170;
+    startX = 190;
     startY = 90; 
     // where the princess is
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 5; i++) {
         this.generateBrick({cx : startX, cy: startY});
         startX += size.width;
     }
@@ -118,6 +123,31 @@ makeFloor : function(width, startX, startY, length ,c) {
     }
             
     
+},
+
+makeLadders : function() {
+    //ugly ugly ugly
+    //Floor 1
+    this.generateLadder({cx : 165, cy : 474, height : 75, broken : true});
+    this.generateLadder({cx : 345, cy : 465, height : 60});
+    //Floor 2
+    this.generateLadder({cx : 225, cy : 406, height : 75});
+    this.generateLadder({cx : 105, cy : 400, height : 60});
+    //Floor 3
+    this.generateLadder({cx : 169, cy : 338, height : 75, broken : true});
+    this.generateLadder({cx : 256, cy : 335, height : 75});
+    this.generateLadder({cx : 375, cy : 329, height : 60});
+    //Floor 4
+    this.generateLadder({cx : 320, cy : 269, height : 90, broken : true});
+    this.generateLadder({cx : 194, cy : 263, height : 75});
+    this.generateLadder({cx : 109, cy : 260, height : 75});
+    //Floor 5
+    this.generateLadder({cx : 222, cy : 185, height : 60, broken : true});
+    this.generateLadder({cx : 380, cy : 179, height : 45});
+    //Top Floor
+    this.generateLadder({cx : 260, cy : 124, height : 45});
+    this.generateLadder({cx : 160, cy : 124, height : 150});
+    this.generateLadder({cx : 130, cy : 124, height : 150});
 },
 
 update: function(du) {

@@ -23,6 +23,7 @@ function createInitialObjects() {
         cy : 100
     });*/
     entityManager.makeWalkway();
+    entityManager.makeLadders();
     
 }
 
@@ -108,6 +109,7 @@ function requestPreloads() {
 
     var requiredImages = {
         brick   : "images/1brick2.png",
+        ladder  : "images/ladder.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -118,6 +120,7 @@ var g_sprites = {};
 function preloadDone() {
 
     g_sprites.brick = new Sprite(g_images.brick);
+    g_sprites.ladder = new Sprite(g_images.ladder);
 
     entityManager.init();
     createInitialObjects();
