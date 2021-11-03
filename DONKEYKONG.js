@@ -28,6 +28,7 @@ function createInitialObjects() {
     // Might change in the near future due to more saucy barrels 
     // being added in the near future
     entityManager.makeBarrels();
+    entityManager.makeOil();
     
 }
 
@@ -115,6 +116,7 @@ function requestPreloads() {
         brick   : "images/1brick2.png",
         ladder  : "images/ladder.png",
         barrels4 : "images/barrels4.png",
+        oil     : "images/oil.png",
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -127,6 +129,7 @@ function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.ladder = new Sprite(g_images.ladder);
     g_sprites.barrels4 = new Sprite(g_images.barrels4);
+    g_sprites.oil = new Sprite(g_images.oil);
 
     entityManager.init();
     createInitialObjects();
