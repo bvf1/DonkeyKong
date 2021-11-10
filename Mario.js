@@ -21,10 +21,16 @@ Mario.prototype = new Entity();
 
 Mario.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
 Mario.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
+Mario.prototype.KEY_UP = 'W'.charCodeAt(0);
+Mario.prototype.KEY_DOWN = 'S'.charCodeAt(0);
+Mario.prototype.KEY_JUMP = ' '.charCodeAt(0);
 
 Mario.prototype.velX = 0;
 Mario.prototype.velY = 0;
 Mario.prototype.grounded = false;
+Mario.prototype.jumping = false;
+Mario.prototype.allowClimb = false;
+Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 var NOMINAL_GRAVITY = 0.12;
@@ -48,29 +54,75 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
+var JUMP_HEIGHT = 8;
+
+Mario.prototype.computeJump = function () {
+    var accelY = 0;
+
+    if (keys[this.KEY_JUMP] && this.grounded && !this.jumping) {
+        accelY += JUMP_HEIGHT;
+        this.jumping = true;
+    }
+    return -accelY;
+}
+
+Mario.prototype.computeClimb = function () {
+    var accelY = 0;
+    if (keys[this.KEY_UP] && this.allowClimb) {
+        accelY -= NOMINAL_SPEED;
+        this.climbing = true;
+    }
+    if (keys[this.KEY_DOWN] && this.allowClimb) {
+        accelY += NOMINAL_SPEED;
+        this.climbing = true;
+    }
+    return accelY;
+}
+
 Mario.prototype.update = function (du) {
 
     spatialManager.unregister(this);
 
     var accelX = this.computeWalk();
     var accelY = 0;
-    
-    accelY += this.computeGravity();
 
+    accelY += this.computeJump();
+    accelY += this.computeClimb();
+    if (!this.climbing) {
+        accelY += this.computeGravity();
+    }
     this.applyAccel(accelX, accelY, du);
 
     var collision = this.isColliding();
-
     if (collision) {
-        if (collision.tag === "Brick") {
-            this.grounded = true;
-            //Step onto the platforms, might need to change in order to make ladders work well
-            if (this.cy + this.getRadius() > collision.getPos().posY - collision.getSize().height/2) {
-                this.cy = collision.getPos().posY - collision.getSize().height/2 - this.getRadius();
+        if (collision[0]) {
+            if (collision[0].tag === "Brick") {
+                this.grounded = true;
+                //Step onto the platforms, might need to change in order to make ladders work well
+                if (this.cy + this.getRadius() > collision[0].getPos().posY - collision[0].getSize().height/2 && !this.jumping) {
+                    this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
+                }
+                //Allow another jump and reset velocity so Mario doesn't get launched into lower orbit
+                this.jumping = false;
+                this.velY = 0;
             }
+        }
+        else {
+            this.grounded = false;
+        }
+        if (collision[1]) {
+            if (collision[1].tag === "Ladder" && !collision[1].broken) {
+                this.allowClimb = true;
+            }
+        }
+        else {
+            this.allowClimb = false;
+            this.climbing = false;
         }
     } else {
         this.grounded = false;
+        this.allowClimb = false;
+        this.climbing = false;
         spatialManager.register(this);
     }
 
@@ -92,20 +144,25 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
         aveVelX = 0;
         this.velX = 0;
     }
+    if (this.climbing && (accelY === 0 || (oldVelY > 0 && accelY < 0) || (oldVelY < 0 && accelY > 0))) {
+        aveVelY = 0;
+        this.velY = 0;
+    }
     //Applying max speed
     if (Math.abs(aveVelX) > MAX_SPEED) {
         aveVelX = aveVelX/Math.abs(aveVelX) * MAX_SPEED;
     }
+    if (Math.abs(aveVelY) > MAX_SPEED && this.climbing) {
+        aveVelY = aveVelY/Math.abs(aveVelY) * MAX_SPEED;
+    }
 
     var nextX = this.cx + aveVelX * du;
+    var nextY = this.cy + aveVelY * du;
 
-    //Apply gravity somehow
-
-    if (this.grounded) {
+    if (this.grounded && !this.jumping && !this.climbing) {
         aveVelY = 0;
         this.velY = 0;
     }
-
     //Move Mario Mario
     this.cx += du * aveVelX;
     this.cy += du * aveVelY;

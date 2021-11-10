@@ -64,13 +64,28 @@ unregister: function(entity) {
 
 findEntityInRange: function(posX, posY, radius) {
     // TODO: YOUR STUFF HERE!
+    var entitiesInRange = [];
     for (var ID in this._entities) {
         var e = this._entities[ID];
         if (e.entity.tag === "Brick") {
             var size = e.entity.getSize();
             var pos = e.entity.getPos();
-            if (posY + radius >= pos.posY - size.height/2 && posX > pos.posX - size.width/2 && posX < pos.posX + size.width/2 && posY < pos.posY) {
-                return e.entity;
+            if (posY + radius >= pos.posY - size.height/2 &&
+                posX > pos.posX - size.width/2 &&
+                posX < pos.posX + size.width/2 &&
+                posY < pos.posY) {
+                entitiesInRange[0] = e.entity;
+            }
+        }
+        if (e.entity.tag === "Ladder") {
+            var size = e.entity.getSize();
+            var pos = e.entity.getPos();
+            if (posX > pos.posX &&
+                posX < pos.posX + size.width &&
+                posY > pos.posY - size.height &&
+                posY < pos.posY) {
+                entitiesInRange[1] = e.entity;
+                return entitiesInRange;
             }
         }
         /*if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
@@ -78,6 +93,9 @@ findEntityInRange: function(posX, posY, radius) {
              < util.square(e.radius+radius)) {
             return e.entity;
         }*/
+    }
+    if (entitiesInRange.length > 0) {
+        return entitiesInRange;
     }
     return false;
 },
