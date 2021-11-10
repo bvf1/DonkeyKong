@@ -19,7 +19,7 @@ with suitable 'data' and 'methods'.
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
 // my flattening of some indentation (white), or my use of incr/decr ops 
 // (plusplus).
-//
+/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/
 /*jslint nomen: true, white: true, plusplus: true*/
 
 
