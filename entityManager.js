@@ -19,7 +19,7 @@ with suitable 'data' and 'methods'.
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
 // my flattening of some indentation (white), or my use of incr/decr ops 
 // (plusplus).
-//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/
+//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/d
 /*jslint nomen: true, white: true, plusplus: true*/
 
 
@@ -30,6 +30,7 @@ var entityManager = {
 _bricks  : [],
 _ladders : [],
 _barrels : [],
+_barrel  : [],
 _oil     : [],
 _mario   : null,
 _kong    : null,
@@ -56,7 +57,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._barrels,this._ladders,this._bricks,this._oil];
+    this._categories = [this._barrels,this._barrel, this._ladders,this._bricks,this._oil];
 },
 
 init: function() {
@@ -86,6 +87,11 @@ generateLadder : function(descr) {
 
 generateBarrels : function(descr) {
     this._barrels.push(new Barrels(descr));
+},
+
+generateBarrel : function(descr) {
+    console.log("genreratebarrel");
+    this._barrel.push(new Barrel(descr));
 },
 
 generateOil : function(descr) {

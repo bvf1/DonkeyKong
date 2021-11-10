@@ -119,6 +119,7 @@ function requestPreloads() {
         brick   : "images/1brick2.png",
         ladder  : "images/ladder.png",
         barrels4: "images/barrels4.png",
+        barrel  : "images/barrel.png",
         oil     : "images/oil.png",
         mario   : "images/mario.png",
         enemies : "images/enemies.png",
@@ -136,6 +137,7 @@ function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.ladder = new Sprite(g_images.ladder);
     g_sprites.barrels4 = new Sprite(g_images.barrels4);
+    g_sprites.barrel = new Sprite(g_images.barrel);
     g_sprites.oil = new Sprite(g_images.oil);
     g_sprites.enemies = new Sprite(g_images.enemies);
     g_sprites.pauline = new Sprite(g_images.pauline);

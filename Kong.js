@@ -18,6 +18,7 @@ function Kong(descr) {
 
 Kong.prototype = new Entity();
 Kong.prototype.version = 0;
+Kong.prototype.allowGenerate = true;
 
 
 Kong.prototype._draw = function(ctx) {
@@ -42,9 +43,12 @@ Kong.prototype._draw = function(ctx) {
     }
     // barrel right
     else if (this.version == 3) {
+
         sourceX = (imageWidth*4)+2;
         sourceY = imageHeight*1;
-        // send barrel;
+        var cx = this.cx + imageWidth*2;
+        if (this.allowGenerate == true)entityManager.generateBarrel({cx : cx, cy : 98});
+
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
 }
@@ -55,14 +59,15 @@ Kong.prototype.time = 0;
 Kong.prototype.update = function (du) {
     this.time += du;
     if (this.time > 90) {
+
         this.time = 0;
         this.version += 1;
 
         if (this.version == 4){
-            
+            this.allowGenerate = true;
+
             this.version = 0;
         }
-        console.log("this version " + this.version);
     }
 
 } 
@@ -74,5 +79,7 @@ Kong.prototype.render = function (ctx) {
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
     this._draw(ctx);
+    if (this.version == 3) this.allowGenerate = false;
+
     this.sprite.scale = origScale;
 };

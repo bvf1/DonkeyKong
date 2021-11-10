@@ -83,3 +83,16 @@ Entity.prototype.wrapPosition = function () {
     this.cx = util.wrapRange(this.cx, 0, g_canvas.width);
     this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };
+
+Entity.prototype.time = 0; 
+Entity.prototype.getVersion = function (du, maxTime, version, maxVersions) {
+
+    this.time += du;
+    if (this.time > maxTime) {
+        this.time = 0;
+        version += 1;
+        if (version == maxVersions) return 0;
+    }
+    return version;
+
+}

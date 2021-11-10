@@ -54,7 +54,7 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
-var JUMP_HEIGHT = 8;
+var JUMP_HEIGHT = 3;
 
 Mario.prototype.computeJump = function () {
     var accelY = 0;

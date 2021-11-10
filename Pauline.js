@@ -64,7 +64,6 @@ Pauline.prototype.update = function (du) {
             this.time = 2;
             this.version = 0;
         }
-        console.log("this version " + this.version);
     }
 
 } 
