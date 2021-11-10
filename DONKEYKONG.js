@@ -22,6 +22,7 @@ function createInitialObjects() {
         cx : 200,
         cy : 100
     });*/
+    entityManager.itsaMe();
     entityManager.makeWalkway();
     entityManager.makeLadders();
 
@@ -115,8 +116,9 @@ function requestPreloads() {
     var requiredImages = {
         brick   : "images/1brick2.png",
         ladder  : "images/ladder.png",
-        barrels4 : "images/barrels4.png",
+        barrels4: "images/barrels4.png",
         oil     : "images/oil.png",
+        mario   : "images/mario.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -126,6 +128,7 @@ var g_sprites = {};
 
 function preloadDone() {
 
+    g_sprites.mario = new Sprite(g_images.mario);
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.ladder = new Sprite(g_images.ladder);
     g_sprites.barrels4 = new Sprite(g_images.barrels4);

@@ -31,6 +31,7 @@ _bricks  : [],
 _ladders : [],
 _barrels : [],
 _oil     : [],
+_mario   : null,
 
 
 // "PRIVATE" METHODS
@@ -59,6 +60,10 @@ deferredSetup : function () {
 init: function() {
     //this._generateRocks();
     //this._generateShip();
+},
+
+itsaMe : function() {
+    this._mario = new Mario({cx : 72, cy : 460});
 },
 
 generateBrick : function(descr) {
@@ -171,12 +176,11 @@ makeOil : function() {
 },
 
 update: function(du) {
-
+    this._mario.update(du);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
         var i = 0;
-
         while (i < aCategory.length) {
 
             var status = aCategory[i].update(du);
@@ -199,6 +203,7 @@ render: function(ctx) {
 
     var debugX = 10, debugY = 100;
 
+    this._mario.render(ctx);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];

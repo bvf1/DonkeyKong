@@ -34,6 +34,7 @@ function Ladder(descr) {
 
 Ladder.prototype = new Entity();
 
+Ladder.prototype.tag = "Ladder";
 
 // Initial, inheritable, default values
     

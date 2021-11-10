@@ -44,28 +44,40 @@ register: function(entity) {
     var spatialID = entity.getSpatialID();
     
     // TODO: YOUR STUFF HERE!
-    this._entities[spatialID] = {
-        entity : entity,
-        posX : pos.posX,
-        posY : pos.posY,
-        radius : entity.getRadius()
-    }
+    this._entities.splice(spatialID,0,{
+        posX: pos.posX,
+        posY: pos.posY,
+        radius: entity.getRadius(),
+        entity: entity
+    });
 },
 
 unregister: function(entity) {
     var spatialID = entity.getSpatialID();
-    this._entities[spatialID] = {};
+    for (let i = 0; i < this._entities.length; i++) {
+        if (this._entities[i].entity.getSpatialID() === spatialID) {
+            this._entities.splice(i,1);
+            return;
+        }
+    }
 },
 
 findEntityInRange: function(posX, posY, radius) {
     // TODO: YOUR STUFF HERE!
     for (var ID in this._entities) {
         var e = this._entities[ID];
-        if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
+        if (e.entity.tag === "Brick") {
+            var size = e.entity.getSize();
+            var pos = e.entity.getPos();
+            if (posY + radius >= pos.posY - size.height/2 && posX > pos.posX - size.width/2 && posX < pos.posX + size.width/2 && posY < pos.posY) {
+                return e.entity;
+            }
+        }
+        /*if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
                                g_canvas.width, g_canvas.height)
              < util.square(e.radius+radius)) {
             return e.entity;
-        }
+        }*/
     }
     return false;
 },

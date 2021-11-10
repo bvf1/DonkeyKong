@@ -39,10 +39,7 @@ Brick.prototype = new Entity();
 Brick.prototype.rotation = 0;
 Brick.prototype.cx = 200;
 Brick.prototype.cy = 200;
-Brick.prototype.velX = 0;
-Brick.prototype.velY = 0;
-Brick.prototype.launchVel = 2;
-Brick.prototype.numSubSteps = 1;
+Brick.prototype.tag = "Brick";
 
 // HACKED-IN AUDIO (no preloading)
 // how to use sound not relevent here
@@ -56,9 +53,6 @@ Brick.prototype.update = function (du) {
     
 };
 
-Brick.prototype.getRadius = function () {
-        return (this.sprite.width / 2) * 0.9;
-};
 
 Brick.prototype.getSize = function() {
     return { 
@@ -72,7 +66,7 @@ Brick.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
-    this.sprite.drawWrappedCentredAt(
+    this.sprite.drawCentredAt(
 	ctx, this.cx, this.cy, this.rotation
     );
     this.sprite.scale = origScale;
