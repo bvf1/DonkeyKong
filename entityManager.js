@@ -32,6 +32,7 @@ _ladders : [],
 _barrels : [],
 _oil     : [],
 _mario   : null,
+_kong    : null,
 
 
 // "PRIVATE" METHODS
@@ -66,6 +67,10 @@ itsaMe : function() {
     this._mario = new Mario({cx : 72, cy : 460});
 },
 
+itsaDonkey : function() {
+    this._kong = new Kong({cx : 59, cy : 34})
+},
+
 generateBrick : function(descr) {
     this._bricks.push(new Brick(descr));
 },
@@ -86,35 +91,35 @@ makeWalkway : function() {
     console.log("makewalkaway");
     var size = Brick.prototype.getSize();
 
-    var startX = 0 + size.width;
+    var startX = 0;
     var startY = 480;
 
     // bottom 
-    for (var i = 0; i < g_canvas.width/size.width-1; i++) {
+    for (var i = 0; i < g_canvas.width/size.width+1; i++) {
         this.generateBrick({cx : startX, cy : startY});
         startX += size.width;
-        if (i > 8 && i % 3 ==0) startY -= 3;
+        if (i > 9 && i % 3 ==0) startY -= 3;
     }
 
     // Middle
     // takes in width of brick x & y of where to start,
         // length of floor, and whether it should go up or down
-    this.makeFloor(size.width, 35, 400, 20, "+");
-    this.makeFloor(size.width, 90, 350, 20,"-");
-    this.makeFloor(size.width, 38, 260, 20,"+");
-    this.makeFloor(size.width, 91, 200, 20, "-");
+    this._makeFloor(size.width, 0, 400, 21, "+");
+    this._makeFloor(size.width, 60, 350, 23,"-");
+    this._makeFloor(size.width, 0, 260, 22,"+");
+    this._makeFloor(size.width, 70, 205, 22, "-");
 
 
     // top
-    startX = 30;
+    startX = 0;
     startY = 130;
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 21; i++) {
         this.generateBrick({cx : startX, cy : startY});
         startX += size.width;
         if (i > 11 && i % 3 ==0) startY += 3;
     }
 
-    startX = 190;
+    startX = 220;
     startY = 90; 
     // where the princess is
     for (var i = 0; i < 5; i++) {
@@ -125,7 +130,7 @@ makeWalkway : function() {
 },
     
 
-makeFloor : function(width, startX, startY, length ,c) {
+_makeFloor : function(width, startX, startY, length ,c) {
     console.log("start " + startX);
     for (var i = 0; i < length; i++) {
         this.generateBrick({cx : startX, cy : startY});
@@ -155,14 +160,14 @@ makeLadders : function() {
     //Floor 4
     this.generateLadder({cx : 320, cy : 269, height : 90, broken : true});
     this.generateLadder({cx : 194, cy : 263, height : 75});
-    this.generateLadder({cx : 109, cy : 260, height : 75});
+    this.generateLadder({cx : 109, cy : 260, height : 60});
     //Floor 5
-    this.generateLadder({cx : 222, cy : 185, height : 60, broken : true});
+    this.generateLadder({cx : 222, cy : 189, height : 60, broken : true});
     this.generateLadder({cx : 380, cy : 179, height : 45});
     //Top Floor
     this.generateLadder({cx : 260, cy : 124, height : 45});
+    this.generateLadder({cx : 190, cy : 124, height : 150});
     this.generateLadder({cx : 160, cy : 124, height : 150});
-    this.generateLadder({cx : 130, cy : 124, height : 150});
 },
 
 makeBarrels : function() {
@@ -176,6 +181,7 @@ makeOil : function() {
 },
 
 update: function(du) {
+    this._kong.update(du);
     this._mario.update(du);
     for (var c = 0; c < this._categories.length; ++c) {
 
@@ -203,6 +209,7 @@ render: function(ctx) {
 
     var debugX = 10, debugY = 100;
 
+    this._kong.render(ctx);
     this._mario.render(ctx);
     for (var c = 0; c < this._categories.length; ++c) {
 

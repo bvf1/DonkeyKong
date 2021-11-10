@@ -72,3 +72,12 @@ Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation)
     this.drawCentredAt(ctx, cx, cy + sh, rotation);
 };
 
+Sprite.prototype.drawPartialImage = function (ctx, sx, sy, cx, cy, dWidth, dHeight) {
+    var sWidth = this.image.width/6;
+    var sHeight = this.image.height/3;
+
+    ctx.drawImage(this.image, sx, sy, sWidth, sHeight, cx, cy, dWidth, dHeight);
+
+}
+
+
