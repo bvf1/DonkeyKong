@@ -22,6 +22,7 @@ function createInitialObjects() {
         cx : 200,
         cy : 100
     });*/
+    entityManager.itsaPauline();
     entityManager.itsaDonkey();
     entityManager.itsaMe();
     entityManager.makeWalkway();
@@ -120,7 +121,8 @@ function requestPreloads() {
         barrels4: "images/barrels4.png",
         oil     : "images/oil.png",
         mario   : "images/mario.png",
-        enemies : "images/enemies.png"
+        enemies : "images/enemies.png",
+        pauline : "images/pauline.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -136,6 +138,7 @@ function preloadDone() {
     g_sprites.barrels4 = new Sprite(g_images.barrels4);
     g_sprites.oil = new Sprite(g_images.oil);
     g_sprites.enemies = new Sprite(g_images.enemies);
+    g_sprites.pauline = new Sprite(g_images.pauline);
 
     entityManager.init();
     createInitialObjects();

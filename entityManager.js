@@ -19,7 +19,7 @@ with suitable 'data' and 'methods'.
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
 // my flattening of some indentation (white), or my use of incr/decr ops 
 // (plusplus).
-/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/
+//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/
 /*jslint nomen: true, white: true, plusplus: true*/
 
 
@@ -33,6 +33,7 @@ _barrels : [],
 _oil     : [],
 _mario   : null,
 _kong    : null,
+_pauline : null,
 
 
 // "PRIVATE" METHODS
@@ -68,7 +69,11 @@ itsaMe : function() {
 },
 
 itsaDonkey : function() {
-    this._kong = new Kong({cx : 59, cy : 34})
+    this._kong = new Kong({cx : 59, cy : 34});
+},
+
+itsaPauline : function() {
+    this._pauline = new Pauline({cx: 190, cy: 55});
 },
 
 generateBrick : function(descr) {
@@ -183,6 +188,7 @@ makeOil : function() {
 update: function(du) {
     this._kong.update(du);
     this._mario.update(du);
+    this._pauline.update(du);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
@@ -211,6 +217,7 @@ render: function(ctx) {
 
     this._kong.render(ctx);
     this._mario.render(ctx);
+    this._pauline.render(ctx);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
