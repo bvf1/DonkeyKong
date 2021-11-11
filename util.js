@@ -56,6 +56,9 @@ square: function(x) {
 
 // DISTANCES
 // =========
+dist: function(h1, h2) {
+    return Math.abs(h1-h2);
+},
 
 distSq: function(x1, y1, x2, y2) {
     return this.square(x2-x1) + this.square(y2-y1);

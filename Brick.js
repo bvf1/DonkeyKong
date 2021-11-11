@@ -61,6 +61,16 @@ Brick.prototype.getSize = function() {
     }
 
 };
+Brick.prototype.getPos = function () {
+    return {
+        posX : this.cx,
+        posY : this.cy 
+    }
+};
+
+Brick.prototype.getFloor = function () {
+    return this.floor;
+};
 
 Brick.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;

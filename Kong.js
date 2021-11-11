@@ -58,7 +58,7 @@ Kong.prototype._draw = function(ctx) {
 Kong.prototype.time = 0;
 Kong.prototype.update = function (du) {
     this.time += du;
-    if (this.time > 90) {
+    if (this.time > 60) {
 
         this.time = 0;
         this.version += 1;

@@ -107,7 +107,7 @@ makeWalkway : function() {
 
     // bottom 
     for (var i = 0; i < g_canvas.width/size.width+1; i++) {
-        this.generateBrick({cx : startX, cy : startY});
+        this.generateBrick({cx : startX, cy : startY, floor : 0});
         startX += size.width;
         if (i > 9 && i % 3 ==0) startY -= 3;
     }
@@ -115,17 +115,17 @@ makeWalkway : function() {
     // Middle
     // takes in width of brick x & y of where to start,
         // length of floor, and whether it should go up or down
-    this._makeFloor(size.width, 0, 400, 21, "+");
-    this._makeFloor(size.width, 60, 350, 23,"-");
-    this._makeFloor(size.width, 0, 260, 22,"+");
-    this._makeFloor(size.width, 70, 205, 22, "-");
+    this._makeFloor(size.width, 0, 400, 21, "+",1);
+    this._makeFloor(size.width, 60, 350, 23,"-",2);
+    this._makeFloor(size.width, 0, 260, 22,"+",3);
+    this._makeFloor(size.width, 70, 205, 22, "-",4);
 
 
     // top
     startX = 0;
     startY = 130;
     for (var i = 0; i < 21; i++) {
-        this.generateBrick({cx : startX, cy : startY});
+        this.generateBrick({cx : startX, cy : startY, floor : 5});
         startX += size.width;
         if (i > 11 && i % 3 ==0) startY += 3;
     }
@@ -134,17 +134,17 @@ makeWalkway : function() {
     startY = 90; 
     // where the princess is
     for (var i = 0; i < 5; i++) {
-        this.generateBrick({cx : startX, cy: startY});
+        this.generateBrick({cx : startX, cy: startY, floor : 6});
         startX += size.width;
     }
     
 },
     
 
-_makeFloor : function(width, startX, startY, length ,c) {
+_makeFloor : function(width, startX, startY, length ,c, floor) {
     console.log("start " + startX);
     for (var i = 0; i < length; i++) {
-        this.generateBrick({cx : startX, cy : startY});
+        this.generateBrick({cx : startX, cy : startY, floor : floor});
         startX += width;
         
         if (i % 3 ==0) {
@@ -155,6 +155,37 @@ _makeFloor : function(width, startX, startY, length ,c) {
             
     
 },
+floor : 5,
+findNearestBrick : function (posX, posY) {
+    var closestBrick = null;
+    var closestIndex = this._bricks.length-1;
+    var closestDist = 600;
+
+    var arr = this._bricks;
+    while(this.floor !== arr[closestIndex].getFloor()) {
+        closestIndex--;
+    }  
+
+   // this.floor--;
+    for (var i=closestIndex; i >= 0; i--) {
+        if (arr[i].getFloor()<this.floor) break;
+        var thisBrick = arr[i];
+        var brickPos = arr[i].getPos();
+        var dist = util.dist(brickPos.posX,posX);
+
+        if (dist < closestDist) {
+            closestBrick = thisBrick;
+            closestIndex = i;
+            closestDist = dist;
+        }
+
+    }
+
+  //  return { theBrick : closestBrick, theIndex : closestIndex }
+        return closestBrick;
+
+},
+
 
 makeLadders : function() {
     //ugly ugly ugly

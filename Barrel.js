@@ -55,8 +55,14 @@ Barrel.prototype.getSize = function () {
 
 };
 
+Barrel.prototype.getRadius = function () {
+    return this._width/2;
+};
+
+
+
 Barrel.prototype._draw = function (ctx) {
-    var imageWidth = (this._width/3)-2;
+    var imageWidth = (this._width/4);
     var imageHeight = this._height/2;
     var sourceX;
     var sourceY;
@@ -78,7 +84,8 @@ Barrel.prototype._draw = function (ctx) {
         sourceX = 0;
         sourceY = imageHeight*1;
     }
-    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 30,30);
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx-imageWidth, this.cy-imageHeight, 30,30);
+   // ctx.fillRect(this.cx, this.cy,3,3); // fill in the pixel at (10,10)
 }//    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
 
 /*Barrel.prototype.update = function (du) {
@@ -97,6 +104,11 @@ Barrel.prototype.update = function (du) {
     this.time += du;
     if (this.time > 5) {
         this.cx += 0.1*SECS_TO_NOMINALS*du;
+        var closestBrick = entityManager.findNearestBrick(this.cx, this.cy);
+
+        console.log("x " + this.cx + " y " + this.cy);
+       // console.log(closestBrick);
+        this.cy = closestBrick.getPos().posY-this._height/2-closestBrick.getSize().height/2.
 
         this.time = 0;
         this.version += 1;
