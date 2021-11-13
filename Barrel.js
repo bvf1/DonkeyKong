@@ -37,6 +37,12 @@ function Barrel(descr) {
 
 Barrel.prototype = new Entity();
 Barrel.prototype.version = 0;
+Barrel.prototype.time = 0;
+// barrel 
+Barrel.prototype.direction = +1;
+Barrel.prototype.floor = 5;
+
+
 
 // Initial, inheritable, default values
 
@@ -85,30 +91,32 @@ Barrel.prototype._draw = function (ctx) {
         sourceY = imageHeight*1;
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx-imageWidth, this.cy-imageHeight, 30,30);
-   // ctx.fillRect(this.cx, this.cy,3,3); // fill in the pixel at (10,10)
-}//    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
-
-/*Barrel.prototype.update = function (du) {
-   // console.log("this version " + this.version);
-    this.cx += 5*du;
-    this.version = this.getVersion(du, 90, this.version, 3)
-
-};*/
+}
 
 
-Barrel.prototype.time = 0;
+
+Barrel.prototype._moveBarrelDown = function(brick, barrel) {
+     barrel._cy = brick.theBrick.getPos().posX;
+}
+
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
 
-  //  console.log(this.cx);
     this.time += du;
     if (this.time > 5) {
-        this.cx += 0.1*SECS_TO_NOMINALS*du;
-        var closestBrick = entityManager.findNearestBrick(this.cx, this.cy);
 
-        console.log("x " + this.cx + " y " + this.cy);
-       // console.log(closestBrick);
-        this.cy = closestBrick.getPos().posY-this._height/2-closestBrick.getSize().height/2.
+        this.cx +=  this.direction*0.1*SECS_TO_NOMINALS*du;
+        
+        var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
+       
+        if (entityManager.isEndOfFloor(closestBrick)) {
+            this.floor -= 1;
+            this.direction *= -1
+            closestBrick = entityManager.findNearestBrick(this.cx, this.cy,this.floor);
+            this._moveBarrelDown(closestBrick, this);
+        }
+
+        this.cy = closestBrick.theBrick.getPos().posY-this._height/2-closestBrick.theBrick.getSize().height/2.
 
         this.time = 0;
         this.version += 1;
@@ -117,7 +125,14 @@ Barrel.prototype.update = function (du) {
             
             this.version = 0;
         }
+
     }
+      //console.log(this.isColliding());
+    // Change to is colliding with oil
+    if ((this.getPos().posX <  100)  && 
+        (this.getPos().posY > g_canvas.height -100))   this.kill();
+
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     spatialManager.register(this);
 
 } 

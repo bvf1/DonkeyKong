@@ -153,22 +153,49 @@ _makeFloor : function(width, startX, startY, length ,c, floor) {
         }
     }
             
-    
 },
-floor : 5,
-findNearestBrick : function (posX, posY) {
+
+// checks if brick is the last brick before barrel falls down
+isEndOfFloor : function (brick) {
+    var compBrick = null;
+    var brickFloor = brick.theBrick.getFloor();
+
+    // for floor with odd numbers we go through floor tiles to see if
+    //   nearest tile is the end of floor
+    if (brickFloor % 2 === 1) {
+        for (var i = this._bricks.length-1; i >= 0; i--) {
+            if (this._bricks[i].getFloor() !== brickFloor) continue;
+            compBrick = this._bricks[i];
+            if (compBrick.getSpatialID() === brick.theBrick.getSpatialID())  {
+                if (this._bricks[i+1].getFloor() === brickFloor) return false;
+                break;
+            }
+
+        }
+    }
+    // checks if the brick with lower number is on a lower floor
+    else {
+        if (this._bricks[brick.index-1].getFloor() < brickFloor) return true; 
+        else return false;
+    }
+    return true;
+ 
+},
+
+// findNearestBrick for y coordinates of barrell
+    // returns closest index as well for isEndOfFloor
+findNearestBrick : function (posX, posY, floor) {
     var closestBrick = null;
     var closestIndex = this._bricks.length-1;
     var closestDist = 600;
 
     var arr = this._bricks;
-    while(this.floor !== arr[closestIndex].getFloor()) {
+
+    while(floor !== arr[closestIndex].getFloor()) {
         closestIndex--;
     }  
 
-   // this.floor--;
     for (var i=closestIndex; i >= 0; i--) {
-        if (arr[i].getFloor()<this.floor) break;
         var thisBrick = arr[i];
         var brickPos = arr[i].getPos();
         var dist = util.dist(brickPos.posX,posX);
@@ -178,11 +205,13 @@ findNearestBrick : function (posX, posY) {
             closestIndex = i;
             closestDist = dist;
         }
+        if (i === 0) break;
+        if (arr[i-1].getFloor()<floor) break;
+
 
     }
 
-  //  return { theBrick : closestBrick, theIndex : closestIndex }
-        return closestBrick;
+        return { theBrick : closestBrick, index : closestIndex};
 
 },
 
@@ -235,6 +264,7 @@ update: function(du) {
             var status = aCategory[i].update(du);
 
             if (status === this.KILL_ME_NOW) {
+                console.log("kill");
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 aCategory.splice(i,1);

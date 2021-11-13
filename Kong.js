@@ -52,7 +52,6 @@ Kong.prototype._draw = function(ctx) {
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
 }
-// Sprite.prototype.drawPartialImage = function (ctx, sx, sy, cx, cy, dWidth, dHeight) {
     
 
 Kong.prototype.time = 0;
