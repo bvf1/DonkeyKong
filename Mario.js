@@ -33,6 +33,8 @@ Mario.prototype.allowClimb = false;
 Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
+Mario.prototype.floor = 0;
+
 var NOMINAL_GRAVITY = 0.12;
 
 Mario.prototype.computeGravity = function () {
@@ -111,6 +113,7 @@ Mario.prototype.update = function (du) {
             this.grounded = false;
         }
         if (collision[1]) {
+            
             if (collision[1].tag === "Ladder" && !collision[1].broken) {
                 this.allowClimb = true;
             }

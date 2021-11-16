@@ -74,7 +74,16 @@ Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation)
 
 
 Sprite.prototype.drawPartialImage = function (ctx, sx, sy, sWidth, sHeight, cx, cy, dWidth, dHeight) {
-
+/*
+    console.log("sx " + sx);
+    console.log("sy " + sy);
+    console.log("sWidth " + sWidth);
+    console.log("sHeight " + sHeight);
+    console.log("cx " + cx);
+    console.log("cx " + cx);
+    console.log("dWidth " + dWidth);
+    console.log("dHeight " + dHeight);
+*/
 
     ctx.drawImage(this.image, sx, sy, sWidth, sHeight, cx, cy, dWidth, dHeight);
 

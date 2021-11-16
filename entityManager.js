@@ -32,6 +32,7 @@ _ladders : [],
 _barrels : [],
 _barrel  : [],
 _oil     : [],
+_hammer  : [],
 _mario   : null,
 _kong    : null,
 _pauline : null,
@@ -57,7 +58,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._barrels,this._barrel, this._ladders,this._bricks,this._oil];
+    this._categories = [this._barrels,this._barrel, this._ladders,this._bricks, this._oil, this._hammer];
 },
 
 init: function() {
@@ -95,6 +96,11 @@ generateBarrel : function(descr) {
 
 generateOil : function(descr) {
     this._oil.push(new Oil(descr));
+},
+
+generateHammer : function(descr) {
+    this._hammer.push(new Hammer(descr))
+    console.log(this._hammer)
 },
 
 makeWalkway : function() {

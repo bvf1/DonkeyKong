@@ -32,6 +32,9 @@ function createInitialObjects() {
     // being added in the near future
     entityManager.makeBarrels();
     entityManager.makeOil();
+    entityManager.generateHammer({cx : 40, cy : 140});
+    entityManager.generateHammer({cx : 400, cy : 400});
+
     
 }
 
@@ -80,11 +83,6 @@ function processDiagnostics() {
 
 }
 
-function processDiagnostics() {
-
-    if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-
-}
 // =================
 // RENDER SIMULATION
 // =================

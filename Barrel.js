@@ -30,6 +30,7 @@ function Barrel(descr) {
 
     this._width = this.sprite.width;
     this._height = this.sprite.height;
+    
 
     spatialManager.register(this);   
 
@@ -62,7 +63,7 @@ Barrel.prototype.getSize = function () {
 };
 
 Barrel.prototype.getRadius = function () {
-    return this._width/2;
+    return this._width/4-2;
 };
 
 
