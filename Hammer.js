@@ -18,7 +18,7 @@ function Hammer(descr) {
 
 
 Hammer.prototype = new Entity();
-Hammer.prototype.radius = 8;
+Hammer.prototype.radius = 5;
 
 Hammer.prototype.getRadius = function () {
     return this.radius;
@@ -41,10 +41,9 @@ Hammer.prototype.render = function (ctx) {
     this.sprite.drawPartialImage(
 	ctx, this._width*5, this._height*2, 
     this._width, this._height,
-    this.cx-this._width/2+13, this.cy-this._height-9, 
-    70, 50
+    this.cx-35, this.cy-this._height-12, 
+    120, 40
     );
-    ctx.fillRect(this.cx, this.cy, this.radius*2, this.radius*2)
 
     this.sprite.scale = origScale;
 };

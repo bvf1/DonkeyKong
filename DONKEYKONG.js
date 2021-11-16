@@ -32,8 +32,8 @@ function createInitialObjects() {
     // being added in the near future
     entityManager.makeBarrels();
     entityManager.makeOil();
-    entityManager.generateHammer({cx : 40, cy : 140});
-    entityManager.generateHammer({cx : 400, cy : 400});
+    entityManager.generateHammer({cx : 70, cy : 170});
+    entityManager.generateHammer({cx : 350, cy : 370});
 
     
 }
@@ -72,7 +72,7 @@ function updateSimulation(du) {
 
 // GAME-SPECIFIC DIAGNOSTICS
 
-var g_renderSpatialDebug = false;
+var g_renderSpatialDebug = true;
 var KEY_SPATIAL = keyCode('X');
 
 
