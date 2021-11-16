@@ -31,7 +31,7 @@ function createInitialObjects() {
     // Might change in the near future due to more saucy barrels 
     // being added in the near future
     entityManager.makeBarrels();
-    entityManager.makeOil();
+    entityManager.generateOil({cx : 30, cy : 456});
     entityManager.generateHammer({cx : 70, cy : 170});
     entityManager.generateHammer({cx : 350, cy : 370});
 
@@ -121,7 +121,8 @@ function requestPreloads() {
         oil     : "images/oil.png",
         mario   : "images/mario.png",
         enemies : "images/enemies.png",
-        pauline : "images/pauline.png"
+        pauline : "images/pauline.png",
+        oils    : "images/oils.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -136,9 +137,10 @@ function preloadDone() {
     g_sprites.ladder = new Sprite(g_images.ladder);
     g_sprites.barrels4 = new Sprite(g_images.barrels4);
     g_sprites.barrel = new Sprite(g_images.barrel);
-    g_sprites.oil = new Sprite(g_images.oil);
+   // g_sprites.oil = new Sprite(g_images.oil);
     g_sprites.enemies = new Sprite(g_images.enemies);
     g_sprites.pauline = new Sprite(g_images.pauline);
+    g_sprites.oil = new Sprite(g_images.oils);
 
     entityManager.init();
     createInitialObjects();

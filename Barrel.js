@@ -91,7 +91,8 @@ Barrel.prototype._draw = function (ctx) {
         sourceX = 0;
         sourceY = imageHeight*1;
     }
-    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx-imageWidth, this.cy-imageHeight, 30,30);
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
+                                 this.cx-imageWidth, this.cy-imageHeight, 30,30);
 }
 
 
@@ -122,18 +123,22 @@ Barrel.prototype.update = function (du) {
         this.time = 0;
         this.version += 1;
 
-        if (this.version == 3){
+        if (this.version === 3){
             
             this.version = 0;
         }
 
     }
-      //console.log(this.isColliding());
-    // Change to is colliding with oil
-    if ((this.getPos().posX <  100)  && 
-        (this.getPos().posY > g_canvas.height -100))   this.kill();
-
+      //console.log(this.isColliding())
+    var collision = this.isColliding();
+    if (collision[2]) {
+        
+        if (collision[2].tag === "Oil") {
+            this.kill();
+        }
+    }
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+
     spatialManager.register(this);
 
 } 

@@ -113,7 +113,6 @@ Mario.prototype.update = function (du) {
             this.grounded = false;
         }
         if (collision[1]) {
-            
             if (collision[1].tag === "Ladder" && !collision[1].broken) {
                 this.allowClimb = true;
             }

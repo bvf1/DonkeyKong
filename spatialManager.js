@@ -88,6 +88,15 @@ findEntityInRange: function(posX, posY, radius) {
                 return entitiesInRange;
             }
         }
+        if (e.entity.tag === "Oil") {
+            var size = e.entity.getSize();
+            var pos = e.entity.getPos();
+            if (pos.posX > posX-radius && pos.posX < posX+radius &&
+                pos.posY > posY-radius && pos.posY < posY+radius){
+                entitiesInRange[2] = e.entity;
+                return entitiesInRange;
+            }
+        }
         /*if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
                                g_canvas.width, g_canvas.height)
              < util.square(e.radius+radius)) {

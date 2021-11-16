@@ -100,7 +100,6 @@ generateOil : function(descr) {
 
 generateHammer : function(descr) {
     this._hammer.push(new Hammer(descr))
-    console.log(this._hammer)
 },
 
 makeWalkway : function() {
@@ -262,9 +261,6 @@ makeBarrels : function() {
 
 },
 
-makeOil : function() {
-    this.generateOil({cx : 30, cy : -53});
-},
 
 update: function(du) {
     this._kong.update(du);
