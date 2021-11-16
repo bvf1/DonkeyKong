@@ -90,7 +90,6 @@ generateBarrels : function(descr) {
 },
 
 generateBarrel : function(descr) {
-    console.log("genreratebarrel");
     this._barrel.push(new Barrel(descr));
 },
 
@@ -156,13 +155,17 @@ _makeFloor : function(width, startX, startY, length ,c, floor) {
 },
 
 // checks if brick is the last brick before barrel falls down
-isEndOfFloor : function (brick) {
+isEndOfFloor : function (brick, barrel) {
     var compBrick = null;
     var brickFloor = brick.theBrick.getFloor();
+    var brickPosX = brick.theBrick.getPos().posX;
 
     // for floor with odd numbers we go through floor tiles to see if
     //   nearest tile is the end of floor
-    if (brickFloor % 2 === 1) {
+    if (brickFloor % 2 === 1 && 
+        barrel.getPos().posX >
+            // check if barrel is at end of brick
+            brickPosX + brick.theBrick.getSize().width/2) {
         for (var i = this._bricks.length-1; i >= 0; i--) {
             if (this._bricks[i].getFloor() !== brickFloor) continue;
             compBrick = this._bricks[i];
@@ -173,9 +176,15 @@ isEndOfFloor : function (brick) {
 
         }
     }
+
     // checks if the brick with lower number is on a lower floor
     else {
-        if (this._bricks[brick.index-1].getFloor() < brickFloor) return true; 
+        if (this._bricks[brick.index-1].getFloor() < brickFloor) {
+            // check if barrel is at beginning of brick
+            if (barrel.getPos().posX < 
+                brickPosX - brick.theBrick.getSize().width/2) return true;
+            else return false;
+        }
         else return false;
     }
     return true;
@@ -264,7 +273,6 @@ update: function(du) {
             var status = aCategory[i].update(du);
 
             if (status === this.KILL_ME_NOW) {
-                console.log("kill");
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 aCategory.splice(i,1);
@@ -281,6 +289,7 @@ update: function(du) {
 render: function(ctx) {
 
     var debugX = 10, debugY = 100;
+
 
     this._kong.render(ctx);
     this._mario.render(ctx);

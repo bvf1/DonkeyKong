@@ -109,7 +109,7 @@ Barrel.prototype.update = function (du) {
         
         var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
        
-        if (entityManager.isEndOfFloor(closestBrick)) {
+        if (entityManager.isEndOfFloor(closestBrick, this)) {
             this.floor -= 1;
             this.direction *= -1
             closestBrick = entityManager.findNearestBrick(this.cx, this.cy,this.floor);
