@@ -100,7 +100,6 @@ Oil.prototype.update = function (du) {
 };
 
 Oil.prototype.render = function (ctx) {
-    console.log(this.version)
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale; // Image is a bit wonky, might have to make it prettier later
     this._draw(ctx);

@@ -3,6 +3,9 @@ function Mario(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
 
+    this.rememberResets();
+
+
     
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.mario;
@@ -18,6 +21,14 @@ function Mario(descr) {
 
 
 Mario.prototype = new Entity();
+
+
+
+Mario.prototype.rememberResets = function () {
+    // Remember my reset positions
+    this.reset_cx = this.cx;
+    this.reset_cy = this.cy;
+};
 
 Mario.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
 Mario.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
@@ -42,6 +53,7 @@ Mario.prototype.computeGravity = function () {
 }
 
 var NOMINAL_SPEED = 0.2;
+
 
 Mario.prototype.computeWalk = function () {
     var accelX = 0;
@@ -80,6 +92,24 @@ Mario.prototype.computeClimb = function () {
     }
     return accelY;
 }
+
+
+
+Mario.prototype.setPos = function(cx, cy) {
+    this.cx = cx;
+    this.cy = cy;
+}
+
+Mario.prototype.reset = function () {
+    // Remember my reset positions
+    this.setPos(this.reset_cx, this.reset_cy);
+};
+
+Mario.prototype.dies = function () {
+    console.log(this.reset_cx);
+    this.reset();
+}
+
 
 Mario.prototype.update = function (du) {
 
@@ -120,6 +150,12 @@ Mario.prototype.update = function (du) {
         else {
             this.allowClimb = false;
             this.climbing = false;
+        }
+        if (collision[3]) {
+            if (collision[3].tag === "Barrel") {
+                this.dies();
+                if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+            }
         }
     } else {
         this.grounded = false;

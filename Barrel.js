@@ -37,12 +37,13 @@ function Barrel(descr) {
 };
 
 Barrel.prototype = new Entity();
+Barrel.prototype.tag = "Barrel"
 Barrel.prototype.version = 0;
 Barrel.prototype.time = 0;
 // barrel 
 Barrel.prototype.direction = +1;
 Barrel.prototype.floor = 5;
-
+Barrel.goDownStairs = false;
 
 
 // Initial, inheritable, default values
@@ -65,6 +66,7 @@ Barrel.prototype.getSize = function () {
 Barrel.prototype.getRadius = function () {
     return this._width/4-2;
 };
+
 
 
 
@@ -101,24 +103,37 @@ Barrel.prototype._moveBarrelDown = function(brick, barrel) {
      barrel._cy = brick.theBrick.getPos().posX;
 }
 
+
+
+Barrel.prototype.normalMovement = function (du) {
+    this.cx +=  this.direction*0.1*SECS_TO_NOMINALS*du;
+        
+    var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
+   
+    if (entityManager.isEndOfFloor(closestBrick, this)) {
+        this.floor -= 1;
+        this.direction *= -1
+        closestBrick = entityManager.findNearestBrick(this.cx, this.cy,this.floor);
+        this._moveBarrelDown(closestBrick, this);
+    }
+
+    this.cy = closestBrick.theBrick.getPos().posY-this._height/2-closestBrick.theBrick.getSize().height/2.
+
+}
+
+Barrel.prototype.downMovement = function (du) {
+
+}
+
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
 
     this.time += du;
     if (this.time > 5) {
 
-        this.cx +=  this.direction*0.1*SECS_TO_NOMINALS*du;
-        
-        var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
-       
-        if (entityManager.isEndOfFloor(closestBrick, this)) {
-            this.floor -= 1;
-            this.direction *= -1
-            closestBrick = entityManager.findNearestBrick(this.cx, this.cy,this.floor);
-            this._moveBarrelDown(closestBrick, this);
-        }
+        if (this.goDownStairs) this.downMovement(du);
+        this.normalMovement(du);
 
-        this.cy = closestBrick.theBrick.getPos().posY-this._height/2-closestBrick.theBrick.getSize().height/2.
 
         this.time = 0;
         this.version += 1;
@@ -129,15 +144,30 @@ Barrel.prototype.update = function (du) {
         }
 
     }
-      //console.log(this.isColliding())
+
+
     var collision = this.isColliding();
-    if (collision[2]) {
-        
-        if (collision[2].tag === "Oil") {
-            this.kill();
+    if (collision) {
+        //check collision with ladder
+        var ladder;
+        if (collision[1]) {
+            if (collision[1].tag === "Ladder") {
+                
+                ladder = collision[1];
+                if (Math.abs(this.cx - ladder.getPos.getX) - 1) {
+                    this.goDownStairs = true;
+                }
+            }
         }
+        //check collsion with oil barrel
+        if (collision[2]) {
+            
+            if (collision[2].tag === "Oil") {
+                this.kill();
+            }
+        }
+        if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     }
-    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
     spatialManager.register(this);
 

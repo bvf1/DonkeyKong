@@ -52,6 +52,10 @@ Ladder.prototype.getSize = function() {
 
 };
 
+Ladder.prototype.getRadius = function () {
+    return this._width/2;
+}
+
 Ladder.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
