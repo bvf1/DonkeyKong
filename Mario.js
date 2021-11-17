@@ -106,7 +106,6 @@ Mario.prototype.reset = function () {
 };
 
 Mario.prototype.dies = function () {
-    console.log(this.reset_cx);
     this.reset();
 }
 
