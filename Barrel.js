@@ -127,7 +127,7 @@ Barrel.prototype.downMovement = function (du) {
 
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
-
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     this.time += du;
     if (this.time > 5) {
 
