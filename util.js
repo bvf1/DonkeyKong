@@ -99,6 +99,13 @@ fillCircle: function (ctx, x, y, r) {
     ctx.fill();
 },
 
+strokeBox: function(ctx, x, y, w, h, style) {
+    var oldStyle = ctx.strokeStyle;
+    ctx.strokeStyle = style;
+    ctx.strokeRect(x, y, w, h);
+    ctx.strokeStyle = oldStyle;
+},
+
 fillBox: function (ctx, x, y, w, h, style) {
     var oldStyle = ctx.fillStyle;
     ctx.fillStyle = style;
