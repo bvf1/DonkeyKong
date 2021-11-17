@@ -33,7 +33,6 @@ _entities : [],
 
 getNewSpatialID : function() {
 
-    // TODO: YOUR STUFF HERE!
     return this._nextSpatialID++;
 
 },
@@ -43,7 +42,6 @@ register: function(entity) {
     var pos = entity.getPos();
     var spatialID = entity.getSpatialID();
     
-    // TODO: YOUR STUFF HERE!
     this._entities.splice(spatialID,0,{
         posX: pos.posX,
         posY: pos.posY,
@@ -63,7 +61,6 @@ unregister: function(entity) {
 },
 
 findEntityInRange: function(posX, posY, radius) {
-    // TODO: YOUR STUFF HERE!
     var entitiesInRange = [];
     for (var ID in this._entities) {
         var e = this._entities[ID];
@@ -103,6 +100,14 @@ findEntityInRange: function(posX, posY, radius) {
                 entitiesInRange[3] = e.entity;
             }
         } 
+        if (e.entity.tag === "Hammer") {
+            var pos = e.entity.getPos();
+            if (pos.posX > posX-radius && pos.posX < posX+radius &&
+                pos.posY > posY-radius && pos.posY < posY+radius){
+                entitiesInRange[4] = e.entity;
+            }
+        }
+
         /*if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
                                g_canvas.width, g_canvas.height)
              < util.square(e.radius+radius)) {

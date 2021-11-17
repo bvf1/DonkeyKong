@@ -45,6 +45,7 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
+Mario.prototype.hasHammer = false;
 
 var NOMINAL_GRAVITY = 0.12;
 
@@ -155,6 +156,13 @@ Mario.prototype.update = function (du) {
                 if (this._isDeadNow) return entityManager.KILL_ME_NOW;
             }
         }
+        if (collision[4]) {
+            if (collision[4].tag === "Hammer") {
+                this.hasHammer = true;
+                collision[4].dies();
+            }
+        }
+
         spatialManager.register(this);
     } else {
         this.grounded = false;
@@ -207,6 +215,10 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
 
 Mario.prototype.getRadius = function () {
     return this._height/2;
+}
+
+Mario.prototype.draw = function (ctx) {
+    
 }
 
 Mario.prototype.render = function (ctx) {
