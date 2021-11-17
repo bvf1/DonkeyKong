@@ -106,7 +106,7 @@ Barrel.prototype._moveBarrelDown = function(brick, barrel) {
 
 
 Barrel.prototype.normalMovement = function (du) {
-    this.cx +=  this.direction*0.1*SECS_TO_NOMINALS*du;
+    this.cx +=  this.direction*0.3*SECS_TO_NOMINALS*du;
         
     var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
    

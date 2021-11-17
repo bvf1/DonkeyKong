@@ -16,8 +16,8 @@ function Mario(descr) {
     this._width = this.sprite.width;
     this._height = this.sprite.height;
 
-    this._realWidth = 50;
-    this._realHeight = 40;
+    this._realWidth = 30;
+    this._realHeight = 30;
 
     spatialManager.register(this);   
 };
@@ -57,7 +57,7 @@ Mario.prototype.computeGravity = function () {
     return NOMINAL_GRAVITY;
 }
 
-var NOMINAL_SPEED = 0.2;
+var NOMINAL_SPEED = 0.05;
 
 
 Mario.prototype.computeWalk = function () {
@@ -73,7 +73,7 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
-var JUMP_HEIGHT = 8;
+var JUMP_HEIGHT = 4.5;
 
 Mario.prototype.computeJump = function () {
     var accelY = 0;
