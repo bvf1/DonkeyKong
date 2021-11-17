@@ -16,6 +16,9 @@ function Mario(descr) {
     this._width = this.sprite.width;
     this._height = this.sprite.height;
 
+    this._realWidth = 50;
+    this._realHeight = 40;
+
     spatialManager.register(this);   
 };
 
@@ -45,6 +48,7 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
+Mario.prototype.version = 3;
 Mario.prototype.hasHammer = false;
 
 var NOMINAL_GRAVITY = 0.12;
@@ -214,19 +218,62 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
 }
 
 Mario.prototype.getRadius = function () {
-    return this._height/2;
+    return this._realHeight/2-3;
 }
 
-Mario.prototype.draw = function (ctx) {
+Mario.prototype._draw = function(ctx) {
+    var imageWidth;
+    var imageHeight = this._height/6;
+    var sourceX;
+    var sourceY;
+    // left 1
+    if (this.version == 0) {
+        imageWidth = this._width/8+4;
+        sourceX = imageWidth*1;
+        sourceY = 0;
+    }
+    // left 2
+    else if (this.version == 1)  {
+        imageWidth = this._width/8+2;
+        sourceX = imageWidth*2;
+        sourceY = 0;
+    }  
+    // left 3
+    else if (this.version == 2)  {
+        imageWidth = this._width/8;
+        sourceX = imageWidth*3;
+        sourceY = 0;
+    } 
+    // right 1
+    else if (this.version == 3) {
+        imageWidth = this._width/8;
+        sourceX = imageWidth*4;
+        sourceY = 0;
+    }
+    // right 2
+    else if (this.version == 4)  {
+        imageWidth = this._width/8-1;
+        sourceX = imageWidth*5;
+        sourceY = 0;
+    }  
+    // right 3
+    else if (this.version == 5)  {
+        imageWidth = this._width/8-1;
+        sourceX = imageWidth*6;
+        sourceY = 0;
+    }
+
     
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
+                                      this.cx-this._realWidth/2, this.cy-this._realHeight/2, 
+                                      this._realWidth,this._realHeight);
 }
 
 Mario.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
-    this.sprite.drawCentredAt(
-	ctx, this.cx, this.cy, this.rotation
-    );
+    this._draw(ctx);
+   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
     this.sprite.scale = origScale;
 };
