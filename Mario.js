@@ -57,7 +57,7 @@ Mario.prototype.computeGravity = function () {
     return NOMINAL_GRAVITY;
 }
 
-var NOMINAL_SPEED = 0.2;
+var NOMINAL_SPEED = 0.05;
 
 
 Mario.prototype.computeWalk = function () {
@@ -73,7 +73,7 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
-var JUMP_HEIGHT = 8;
+var JUMP_HEIGHT = 4.5;
 
 Mario.prototype.computeJump = function () {
     var accelY = 0;
@@ -344,3 +344,11 @@ Mario.prototype.drawWalkingHammer = function(ctx) {
         this.cx-this._realWidth+diffx, this.cy-this._realHeight-10, 
         w, h);
 }
+Mario.prototype.render = function (ctx) {
+    var origScale = this.sprite.scale;
+    // pass my scale into the sprite, for drawing
+    this.sprite.scale = -this._scale;
+    this._draw(ctx);
+   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
+    this.sprite.scale = origScale;
+};
