@@ -263,6 +263,12 @@ makeBarrels : function() {
 
 },
 
+killBarrels : function() {
+    for (var i = 0; i < this._barrel.length; i++) {
+        this._barrel[i].kill();
+    }
+},
+
 
 update: function(du) {
     this._kong.update(du);

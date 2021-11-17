@@ -106,6 +106,7 @@ Mario.prototype.reset = function () {
 };
 
 Mario.prototype.dies = function () {
+    entityManager.killBarrels();
     this.reset();
 }
 
