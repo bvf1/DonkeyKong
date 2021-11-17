@@ -18,20 +18,28 @@ function Hammer(descr) {
 
 
 Hammer.prototype = new Entity();
+Hammer.prototype.tag = "Hammer";
 Hammer.prototype.radius = 5;
+Hammer.prototype.isAlive = true;
+
 
 Hammer.prototype.getRadius = function () {
     return this.radius;
 }
 
-Hammer.prototype.update = function (du) {
 
-    spatialManager.unregister(this);
-    spatialManager.register(this);
-
-
+Hammer.prototype.dies = function() {
+    this.isAlive = false;
+    this.kill();
 }
 
+Hammer.prototype.update = function(du) {
+    spatialManager.unregister(this);  
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+
+    spatialManager.register(this);   
+
+}
 
 
 Hammer.prototype.render = function (ctx) {
@@ -47,3 +55,4 @@ Hammer.prototype.render = function (ctx) {
 
     this.sprite.scale = origScale;
 };
+

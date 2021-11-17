@@ -119,7 +119,7 @@ function requestPreloads() {
         barrels4: "images/barrels4.png",
         barrel  : "images/barrel.png",
         oil     : "images/oil.png",
-        mario   : "images/mario.png",
+        mario   : "images/mario2.png",
         enemies : "images/enemies.png",
         pauline : "images/pauline.png",
         oils    : "images/oils.png"
