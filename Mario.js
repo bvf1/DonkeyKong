@@ -16,8 +16,8 @@ function Mario(descr) {
     this._width = this.sprite.width;
     this._height = this.sprite.height;
 
-    this._realWidth = 50;
-    this._realHeight = 40;
+    this._realWidth = 30;
+    this._realHeight = 30;
 
     spatialManager.register(this);   
 };
@@ -48,7 +48,7 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
-Mario.prototype.version = 3;
+Mario.prototype.version = 11;
 Mario.prototype.hasHammer = false;
 
 var NOMINAL_GRAVITY = 0.12;
@@ -219,14 +219,47 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
 }
 
 Mario.prototype.getRadius = function () {
-    return this._realHeight/2-3;
+    return this._realHeight/2-1;
 }
 
 Mario.prototype._draw = function(ctx) {
     var imageWidth;
-    var imageHeight = this._height/6;
+    var imageHeight;
     var sourceX;
     var sourceY;
+    var x = this._realWidth;
+    var y = this._realHeight;
+    if (this.version >= 0 && this.version < 6) {
+        this.drawWalking(ctx);
+    }
+    else {
+        this.drawWalkingHammer(ctx);
+    } 
+
+    
+}
+
+Mario.prototype.render = function (ctx) {
+    var origScale = this.sprite.scale;
+    // pass my scale into the sprite, for drawing
+    this.sprite.scale = this._scale;
+    this._draw(ctx);
+   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
+    this.sprite.scale = origScale;
+};
+
+
+
+
+
+
+
+Mario.prototype.drawWalking = function(ctx)  {
+    var imageWidth;
+    var imageHeight = this._height/8;
+    var sourceX;
+    var sourceY;
+    
     // left 1
     if (this.version == 0) {
         imageWidth = this._width/8+4;
@@ -258,7 +291,7 @@ Mario.prototype._draw = function(ctx) {
         sourceY = 0;
     }  
     // right 3
-    else if (this.version == 5)  {
+    else if (this.version === 5)  {
         imageWidth = this._width/8-1;
         sourceX = imageWidth*6;
         sourceY = 0;
@@ -266,15 +299,48 @@ Mario.prototype._draw = function(ctx) {
 
     
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
-                                      this.cx-this._realWidth/2, this.cy-this._realHeight/2, 
-                                      this._realWidth,this._realHeight);
+                                      this.cx-this._realWidth, this.cy-this._realHeight/2, 
+                                      this._realWidth*2,this._realHeight);
 }
 
-Mario.prototype.render = function (ctx) {
-    var origScale = this.sprite.scale;
-    // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
-    this._draw(ctx);
-   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
-    this.sprite.scale = origScale;
-};
+Mario.prototype.drawWalkingHammer = function(ctx) {
+    var imageWidth = this._width/6;
+    var imageHeight = this._height/5
+    var sourceX;
+    var sourceY = imageHeight*2;
+
+    var diffx = -31
+    var dy = this.cy-this._realHeight;
+    var w = 80;
+    var h = this._realHeight*1.8;
+
+    if (this.version === 6) {
+        sourceX = imageWidth*0;
+
+    } 
+    else if (this.version === 7) {
+        sourceX = imageWidth*1;
+    
+
+    } else if (this.version === 8) {
+        sourceX = imageWidth*2;
+
+    } else if (this.version === 9) {
+        diffx = 5;
+        sourceX = imageWidth*3;
+
+    } else if (this.version === 10) {
+        diffx = 5;
+
+        sourceX = imageWidth*4;
+
+    } else if (this.version === 11) {
+        diffx = 4;
+
+        sourceX = imageWidth*5;
+
+    } 
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
+        this.cx-this._realWidth+diffx, this.cy-this._realHeight-10, 
+        w, h);
+}

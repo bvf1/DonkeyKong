@@ -93,6 +93,7 @@ Barrel.prototype._draw = function (ctx) {
         sourceX = 0;
         sourceY = imageHeight*1;
     }
+    
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
                                  this.cx-imageWidth, this.cy-imageHeight, 30,30);
 }
