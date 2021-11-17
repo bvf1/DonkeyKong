@@ -68,7 +68,7 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
-var JUMP_HEIGHT = 3;
+var JUMP_HEIGHT = 8;
 
 Mario.prototype.computeJump = function () {
     var accelY = 0;
@@ -112,7 +112,6 @@ Mario.prototype.dies = function () {
 
 
 Mario.prototype.update = function (du) {
-
     spatialManager.unregister(this);
 
     var accelX = this.computeWalk();
@@ -157,6 +156,7 @@ Mario.prototype.update = function (du) {
                 if (this._isDeadNow) return entityManager.KILL_ME_NOW;
             }
         }
+        spatialManager.register(this);
     } else {
         this.grounded = false;
         this.allowClimb = false;

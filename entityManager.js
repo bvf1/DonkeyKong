@@ -58,7 +58,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._barrels,this._barrel, this._ladders,this._bricks, this._oil, this._hammer];
+    this._categories = [this._barrels, this._ladders,this._barrel,this._bricks, this._oil, this._hammer];
 },
 
 init: function() {
@@ -235,24 +235,24 @@ findNearestBrick : function (posX, posY, floor) {
 makeLadders : function() {
     //ugly ugly ugly
     //Floor 1
-    this.generateLadder({cx : 165, cy : 474, height : 75, broken : true});
-    this.generateLadder({cx : 345, cy : 465, height : 60});
+    this.generateLadder({cx : 165, cy : 474, height : 80, broken : true});
+    this.generateLadder({cx : 345, cy : 467, height : 65});
     //Floor 2
-    this.generateLadder({cx : 225, cy : 406, height : 75});
-    this.generateLadder({cx : 105, cy : 400, height : 60});
+    this.generateLadder({cx : 225, cy : 406, height : 80});
+    this.generateLadder({cx : 105, cy : 400, height : 70});
     //Floor 3
-    this.generateLadder({cx : 169, cy : 338, height : 75, broken : true});
+    this.generateLadder({cx : 169, cy : 338, height : 85, broken : true});
     this.generateLadder({cx : 256, cy : 335, height : 75});
-    this.generateLadder({cx : 375, cy : 329, height : 60});
+    this.generateLadder({cx : 375, cy : 329, height : 65});
     //Floor 4
-    this.generateLadder({cx : 320, cy : 269, height : 90, broken : true});
-    this.generateLadder({cx : 194, cy : 263, height : 75});
-    this.generateLadder({cx : 109, cy : 260, height : 60});
+    this.generateLadder({cx : 320, cy : 272, height : 100, broken : true});
+    this.generateLadder({cx : 194, cy : 266, height : 85});
+    this.generateLadder({cx : 109, cy : 260, height : 75});
     //Floor 5
-    this.generateLadder({cx : 222, cy : 189, height : 60, broken : true});
-    this.generateLadder({cx : 380, cy : 179, height : 45});
+    this.generateLadder({cx : 222, cy : 190, height : 80, broken : true});
+    this.generateLadder({cx : 380, cy : 181, height : 55});
     //Top Floor
-    this.generateLadder({cx : 260, cy : 124, height : 45});
+    this.generateLadder({cx : 260, cy : 127, height : 55});
     this.generateLadder({cx : 190, cy : 124, height : 150});
     this.generateLadder({cx : 160, cy : 124, height : 150});
 },
@@ -295,9 +295,6 @@ render: function(ctx) {
     var debugX = 10, debugY = 100;
 
 
-    this._kong.render(ctx);
-    this._mario.render(ctx);
-    this._pauline.render(ctx);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
@@ -314,6 +311,9 @@ render: function(ctx) {
         }
         debugY += 10;
     }
+    this._kong.render(ctx);
+    this._mario.render(ctx);
+    this._pauline.render(ctx);
 }
 
 }

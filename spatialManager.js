@@ -85,7 +85,6 @@ findEntityInRange: function(posX, posY, radius) {
                 posY > pos.posY - size.height &&
                 posY < pos.posY) {
                 entitiesInRange[1] = e.entity;
-                return entitiesInRange;
             }
         }
         if (e.entity.tag === "Oil") {
@@ -94,7 +93,6 @@ findEntityInRange: function(posX, posY, radius) {
             if (pos.posX > posX-radius && pos.posX < posX+radius &&
                 pos.posY > posY-radius && pos.posY < posY+radius){
                 entitiesInRange[2] = e.entity;
-                return entitiesInRange;
             }
         }
         if (e.entity.tag === "Barrel") {
@@ -103,7 +101,6 @@ findEntityInRange: function(posX, posY, radius) {
             if (pos.posX > posX-radius && pos.posX < posX+radius &&
                 pos.posY > posY-radius && pos.posY < posY+radius){
                 entitiesInRange[3] = e.entity;
-                return entitiesInRange;
             }
         } 
         /*if (util.wrappedDistSq(e.posX, e.posY, posX, posY, 
@@ -123,7 +120,13 @@ render: function(ctx) {
     ctx.strokeStyle = "red";
     for (var ID in this._entities) {
         var e = this._entities[ID];
-        util.strokeCircle(ctx, e.posX, e.posY, e.radius);
+        if (e.entity.tag === "Ladder") {
+            var size = e.entity.getSize();
+            //util.strokeBox(ctx, e.posX, e.posY-size.height, size.width, size.height, "red");
+        }
+        else {
+            util.strokeCircle(ctx, e.posX, e.posY, e.radius);
+        }
     }
     ctx.strokeStyle = oldStyle;
 }

@@ -61,7 +61,7 @@ Ladder.prototype.render = function (ctx) {
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
     let rungs = Math.floor(this.height/this._spriteHeight);
-    for (let i = 0; i < rungs; i++) {
+    for (let i = 0; i < rungs-1; i++) {
         if (!this.broken || (i !== Math.floor(rungs/2) && i !== Math.floor(rungs/2)-1)) {
             this.sprite.drawCentredAt(
                 ctx,
