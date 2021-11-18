@@ -93,7 +93,7 @@ Barrel.prototype._draw = function (ctx) {
         sourceX = 0;
         sourceY = imageHeight*1;
     }
-    
+
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
                                  this.cx-imageWidth, this.cy-imageHeight, 30,30);
 }
@@ -160,10 +160,18 @@ Barrel.prototype.update = function (du) {
                 }
             }
         }
+        
         //check collsion with oil barrel
         if (collision[2]) {
             
             if (collision[2].tag === "Oil") {
+                this.kill();
+            }
+        }
+        //check collision with hammer
+        if (collision[4]) {
+            if (collision[4].tag === "Hammer") {
+                collision[4].dies();
                 this.kill();
             }
         }

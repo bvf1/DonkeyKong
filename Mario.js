@@ -48,7 +48,7 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
-Mario.prototype.version = 11;
+Mario.prototype.version = 1;
 Mario.prototype.hasHammer = false;
 
 var NOMINAL_GRAVITY = 0.12;
@@ -105,6 +105,9 @@ Mario.prototype.setPos = function(cx, cy) {
     this.cy = cy;
 }
 
+Mario.prototype.getVersion = function () {
+    return this.version;
+}
 Mario.prototype.reset = function () {
     // Remember my reset positions
     this.setPos(this.reset_cx, this.reset_cy);
@@ -158,23 +161,23 @@ Mario.prototype.update = function (du) {
         if (collision[3]) {
             if (collision[3].tag === "Barrel") {
                 this.dies();
-                if (this._isDeadNow) return entityManager.KILL_ME_NOW;
             }
         }
         if (collision[4]) {
             if (collision[4].tag === "Hammer") {
                 this.hasHammer = true;
-                collision[4].dies();
+                collision[4].inUse();
             }
         }
 
-        spatialManager.register(this);
     } else {
         this.grounded = false;
         this.allowClimb = false;
         this.climbing = false;
-        spatialManager.register(this);
     }
+
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    spatialManager.register(this);
 
 }
 
