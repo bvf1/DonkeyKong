@@ -115,7 +115,7 @@ Mario.prototype.reset = function () {
 Mario.prototype.dies = function () {
     entityManager.reset();
     this.reset();
-    entityManager.makeBarrels();
+    entityManager.makeHammers();
 }
 
 
