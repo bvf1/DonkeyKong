@@ -104,6 +104,11 @@ generateHammer : function(descr) {
     this._hammer.push(new Hammer(descr))
 },
 
+makeHammers : function () {
+    entityManager.generateHammer({cx : 70, cy : 170});
+    entityManager.generateHammer({cx : 350, cy : 370});
+},
+
 makeWalkway : function() {
     console.log("makewalkaway");
     var size = Brick.prototype.getSize();
@@ -262,12 +267,18 @@ makeBarrels : function() {
     this.generateBarrels({cx : 40, cy : 589});
 
 },
-
-killBarrels : function() {
+reset : function() {
     for (var i = 0; i < this._barrel.length; i++) {
         this._barrel[i].kill();
     }
+    
+    for (var i = 0; i < this._hammer.length; i++) {
+        this._hammer[i].kill();
+    }
+
 },
+
+
 
 
 update: function(du) {

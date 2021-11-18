@@ -35,8 +35,7 @@ Mario.prototype.rememberResets = function () {
 
 Mario.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
 Mario.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
-Mario.prototype.KEY_UP = 'W'.charCodeAt(0);
-Mario.prototype.KEY_DOWN = 'S'.charCodeAt(0);
+Mario.prototype.KEY_UP = 'W'.charCodeAt(0);Mario.prototype.KEY_DOWN = 'S'.charCodeAt(0);
 Mario.prototype.KEY_JUMP = ' '.charCodeAt(0);
 
 Mario.prototype.velX = 0;
@@ -48,7 +47,7 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
-Mario.prototype.version = 1;
+Mario.prototype.version = 0;
 Mario.prototype.hasHammer = false;
 
 var NOMINAL_GRAVITY = 0.12;
@@ -114,8 +113,9 @@ Mario.prototype.reset = function () {
 };
 
 Mario.prototype.dies = function () {
-    entityManager.killBarrels();
+    entityManager.reset();
     this.reset();
+    entityManager.makeBarrels();
 }
 
 
@@ -226,32 +226,25 @@ Mario.prototype.getRadius = function () {
 }
 
 Mario.prototype._draw = function(ctx) {
-    var imageWidth;
-    var imageHeight;
-    var sourceX;
-    var sourceY;
-    var x = this._realWidth;
-    var y = this._realHeight;
+    
     if (this.version >= 0 && this.version < 6) {
         this.drawWalking(ctx);
     }
-    else {
+    else if (this.version >= 6 && this.version < 12) {
         this.drawWalkingHammer(ctx);
     } 
 
+    else if (this.version >=12 && this.version <19)   {
+        this.drawClimbing(ctx);
+    }
+    
+    else {
+        
+        this.drawDeadMario(ctx);
+    }
+
     
 }
-
-Mario.prototype.render = function (ctx) {
-    var origScale = this.sprite.scale;
-    // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
-    this._draw(ctx);
-   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
-    this.sprite.scale = origScale;
-};
-
-
 
 
 
@@ -346,6 +339,69 @@ Mario.prototype.drawWalkingHammer = function(ctx) {
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
         this.cx-this._realWidth+diffx, this.cy-this._realHeight-10, 
         w, h);
+}
+
+Mario.prototype.drawClimbing = function (ctx) {
+    var imageWidth = this._width/8;
+    var imageHeight = this._height/5;
+    var sourceX;
+    var sourceY = imageHeight*1;
+    
+    
+    if (this.version === 12) {
+        sourceX = imageWidth*0;
+    }
+    else if (this.version === 13) {
+        sourceX = imageWidth*1;
+    }
+    else if (this.version === 14) {
+        sourceX = imageWidth*2;
+    }
+    else if (this.version === 15) {
+        sourceX = imageWidth*3;
+    }
+    else if (this.version === 16) {
+        sourceX = imageWidth*4;
+    }
+    else if (this.version === 17) {
+        sourceX = imageWidth*5;
+    }
+    else if (this.version === 18) {
+        sourceX = imageWidth*6;
+    }
+
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
+        this.cx-this._realWidth/1.2-3, this.cy-this._realHeight/3, 
+        this._realWidth+20,this._realHeight);
+
+}
+
+
+Mario.prototype.drawDeadMario = function (ctx) {
+    var imageWidth = this._width/8
+    var imageHeight = this._height/6;
+    var sourceX;
+    var sourceY = imageHeight*5;
+    
+    // left 1
+    if (this.version === 19) {
+        sourceX = imageWidth*0;
+    } 
+    else if (this.version === 20) {
+        sourceX = imageWidth*1;
+    } 
+    else if (this.version === 21) {
+        sourceX = imageWidth*2;
+    } 
+    else if (this.version === 22) {
+        sourceX = imageWidth*3;
+    } 
+    
+
+    this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
+        this.cx-this._realWidth/2-4, this.cy-this._realHeight/2, 
+        this._realWidth+20,this._realHeight);
+
 }
 Mario.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
