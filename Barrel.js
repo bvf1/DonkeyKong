@@ -107,7 +107,7 @@ Barrel.prototype._moveBarrelDown = function(brick, barrel) {
 
 
 Barrel.prototype.normalMovement = function (du) {
-    this.cx +=  this.direction*0.3*SECS_TO_NOMINALS*du;
+    this.cx +=  this.direction*4.5*du;
         
     var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
    
@@ -129,11 +129,11 @@ Barrel.prototype.downMovement = function (du) {
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    
+    if (this.goDownStairs) this.downMovement(du);
+    this.normalMovement(du);
     this.time += du;
     if (this.time > 5) {
-
-        if (this.goDownStairs) this.downMovement(du);
-        this.normalMovement(du);
 
 
         this.time = 0;

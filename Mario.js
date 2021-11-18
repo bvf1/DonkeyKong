@@ -72,7 +72,7 @@ Mario.prototype.computeWalk = function () {
     return accelX;
 }
 
-var JUMP_HEIGHT = 4.5;
+var JUMP_HEIGHT = 2.8;
 
 Mario.prototype.computeJump = function () {
     var accelY = 0;
@@ -217,8 +217,8 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
         this.velY = 0;
     }
     //Move Mario Mario
-    this.cx += du * aveVelX;
-    this.cy += du * aveVelY;
+    this.cx += aveVelX;
+    this.cy += aveVelY;
 }
 
 Mario.prototype.getRadius = function () {

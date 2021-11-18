@@ -95,10 +95,12 @@ findEntityInRange: function(posX, posY, radius) {
         if (e.entity.tag === "Barrel") {
             var size = e.entity.getSize();
             var pos = e.entity.getPos();
-            if (pos.posX > posX-radius && pos.posX < posX+radius &&
-                pos.posY > posY-radius && pos.posY < posY+radius){
-                entitiesInRange[3] = e.entity;
-            }
+            var entRadius = e.entity.getRadius();
+            if (util.dist(posX, pos.posX) < radius + entRadius &&
+                util.dist(posY, pos.posY) < radius + entRadius)
+
+           //* if (pos.posX > posX-radius && pos.posX < posX+radius && pos.posY > posY-radius && pos.posY < posY+radius)
+           {  entitiesInRange[3] = e.entity;}
         } 
         if (e.entity.tag === "Hammer") {
             var pos = e.entity.getPos();
