@@ -41,9 +41,15 @@ Barrel.prototype.tag = "Barrel"
 Barrel.prototype.version = 0;
 Barrel.prototype.time = 0;
 // barrel 
+Barrel.prototype.velY = 0;
 Barrel.prototype.direction = +1;
 Barrel.prototype.floor = 5;
-Barrel.goDownStairs = false;
+Barrel.prototype.starting = true;
+Barrel.prototype.goDownLadder = false;
+Barrel.prototype.laddering = false;
+Barrel.prototype.ladderTime = 0;
+Barrel.prototype.falling = false;
+Barrel.prototype.fallingTime = 0;
 
 
 // Initial, inheritable, default values
@@ -104,34 +110,38 @@ Barrel.prototype._moveBarrelDown = function(brick, barrel) {
      barrel._cy = brick.theBrick.getPos().posX;
 }
 
-
+var BARREL_SPEED = 2.5;
+var GRAVITY = 0.12;
 
 Barrel.prototype.normalMovement = function (du) {
-    this.cx +=  this.direction*4.5*du;
         
-    var closestBrick = entityManager.findNearestBrick(this.cx, this.cy, this.floor);
-   
-    if (entityManager.isEndOfFloor(closestBrick, this)) {
-        this.floor -= 1;
-        this.direction *= -1
-        closestBrick = entityManager.findNearestBrick(this.cx, this.cy,this.floor);
-        this._moveBarrelDown(closestBrick, this);
-    }
+    var oldVelY = this.velY;
 
-    this.cy = closestBrick.theBrick.getPos().posY-this._height/2-closestBrick.theBrick.getSize().height/2.
+    this.velY += GRAVITY;
+
+    var aveVelY = (oldVelY + this.velY) / 2;
+
+    if (!this.laddering) {
+        this.cx +=  this.direction*BARREL_SPEED*du;
+    }
+    this.cy += aveVelY * du;
 
 }
 
 Barrel.prototype.downMovement = function (du) {
-
+    
 }
 
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
-    
-    if (this.goDownStairs) this.downMovement(du);
+    if (this.goDownLadder && Math.random() > 0.9 && !this.laddering) this.laddering = true;
     this.normalMovement(du);
+
+    if (this.laddering) {
+        this.ladderTime += du;
+    }
+
     this.time += du;
     if (this.time > 5) {
 
@@ -145,20 +155,57 @@ Barrel.prototype.update = function (du) {
         }
 
     }
-
-
     var collision = this.isColliding();
     if (collision) {
+        //Check collision with brick
+        if (collision[0]) {
+            if (collision[0].tag === "Brick") {
+                //Stop laddering after a certain period so barrel doesn't fall through the world
+                if (this.ladderTime > du*24) {
+                    this.laddering = false;
+                }
+                //Don't clip through the floor
+                if (this.cy + this.getRadius() > collision[0].getPos().posY - collision[0].getSize().height/2 && !this.laddering) {
+                    this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
+                }
+                //Turn around after falling
+                if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24) {
+                    this.direction *= -1;
+                    this.ladderTime = 0;
+                }
+                this.starting = false;
+                this.falling = false;
+                this.fallingTime = 0;
+                if (!this.laddering) {
+                    this.velY = 0;
+                }
+            }
+        }
+        else {
+            this.falling = true;
+        }
         //check collision with ladder
         var ladder;
         if (collision[1]) {
             if (collision[1].tag === "Ladder") {
                 
                 ladder = collision[1];
-                if (Math.abs(this.cx - ladder.getPos.getX) - 1) {
-                    this.goDownStairs = true;
+                var pos = ladder.getPos();
+                var size = ladder.getSize();
+                //Check if in right position above ladder and around center
+                if (this.cy < pos.posY - 3*size.height/4 &&
+                    this.cx > pos.posX + size.width/2 - 2 &&
+                    this.cx < pos.posX + size.width/2 + 2 &&
+                    !this.laddering) {
+                    this.goDownLadder = true;
+                }
+                else {
+                    this.goDownLadder = false;
                 }
             }
+        }
+        else {
+            this.goDownLadder = false;
         }
         
         //check collsion with oil barrel
@@ -176,6 +223,11 @@ Barrel.prototype.update = function (du) {
             }
         }
         if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    }
+    else {
+        this.falling = true;
+        this.fallingTime += du;
+        this.goDownLadder = false;
     }
 
     spatialManager.register(this);

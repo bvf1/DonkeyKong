@@ -129,7 +129,7 @@ render: function(ctx) {
         var e = this._entities[ID];
         if (e.entity.tag === "Ladder") {
             var size = e.entity.getSize();
-            //util.strokeBox(ctx, e.posX, e.posY-size.height, size.width, size.height, "red");
+            util.strokeBox(ctx, e.posX, e.posY-size.height, size.width, size.height, "red");
         }
         else {
             util.strokeCircle(ctx, e.posX, e.posY, e.radius);

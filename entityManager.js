@@ -240,22 +240,22 @@ findNearestBrick : function (posX, posY, floor) {
 makeLadders : function() {
     //ugly ugly ugly
     //Floor 1
-    this.generateLadder({cx : 165, cy : 474, height : 80, broken : true});
-    this.generateLadder({cx : 345, cy : 467, height : 65});
+    this.generateLadder({cx : 165, cy : 474, height : 85, broken : true});
+    this.generateLadder({cx : 345, cy : 467, height : 69});
     //Floor 2
-    this.generateLadder({cx : 225, cy : 406, height : 80});
-    this.generateLadder({cx : 105, cy : 400, height : 70});
+    this.generateLadder({cx : 225, cy : 406, height : 85});
+    this.generateLadder({cx : 105, cy : 400, height : 73});
     //Floor 3
-    this.generateLadder({cx : 169, cy : 338, height : 85, broken : true});
-    this.generateLadder({cx : 256, cy : 335, height : 75});
-    this.generateLadder({cx : 375, cy : 329, height : 65});
+    this.generateLadder({cx : 169, cy : 338, height : 90, broken : true});
+    this.generateLadder({cx : 256, cy : 335, height : 80});
+    this.generateLadder({cx : 375, cy : 329, height : 68});
     //Floor 4
-    this.generateLadder({cx : 320, cy : 272, height : 100, broken : true});
-    this.generateLadder({cx : 194, cy : 266, height : 85});
-    this.generateLadder({cx : 109, cy : 260, height : 75});
+    this.generateLadder({cx : 320, cy : 272, height : 103, broken : true});
+    this.generateLadder({cx : 194, cy : 266, height : 89});
+    this.generateLadder({cx : 109, cy : 261, height : 78});
     //Floor 5
     this.generateLadder({cx : 222, cy : 190, height : 80, broken : true});
-    this.generateLadder({cx : 380, cy : 181, height : 55});
+    this.generateLadder({cx : 380, cy : 181, height : 61});
     //Top Floor
     this.generateLadder({cx : 260, cy : 127, height : 55});
     this.generateLadder({cx : 190, cy : 124, height : 150});
