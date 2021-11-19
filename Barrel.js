@@ -65,7 +65,7 @@ this.warpSound.play();*/
 Barrel.prototype.getSize = function () {
     if (!this.laddering) return null;
     return {
-        width : this._width-10,
+        width : this._width-25,
         height: this._height
     };
 }
@@ -112,16 +112,16 @@ Barrel.prototype._draw = function (ctx) {
         imageWidth = (this._width/2);
         sourceX = imageWidth*1;
         sourceY = imageHeight*0;
-        diffx = -15;
-        diffw = 3;
+        diffx = -7;
+        diffw = 2.5;
 
     }
     else if (this.version == 5) {
         imageWidth = (this._width/2);
         sourceX = imageWidth*1;
         sourceY = imageHeight*1;
-        diffx = -15;
-        diffw = 3;
+        diffx = -7;
+        diffw = 2.5;
     }
 
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
@@ -159,6 +159,18 @@ Barrel.prototype.switch = false;
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+
+
+
+    if (this.cy > 450) {
+        this.direction = -1;
+        this.specialBarrel = false;
+        
+    }
+    if (this.specialBarrel) {
+        this.laddering = true;
+    }
+
     if (this.goDownLadder && Math.random() > 0.9 && !this.laddering) this.laddering = true;
     this.normalMovement(du);
 
@@ -178,19 +190,18 @@ Barrel.prototype.update = function (du) {
     if (collision) {
         //Check collision with brick
         if (collision[0]) {
-            console.log(collision[0]);
             if (collision[0].tag === "Brick") {
 
                 //Stop laddering after a certain period so barrel doesn't fall through the world
-                if (this.ladderTime > du*24 && !this.specialBarrel) {
+                if (this.ladderTime > du*24 && this.specialBarrel === false) {
                     this.laddering = false;
                 }
                 //Don't clip through the floor
-                if (this.cy + this.getRadius() > collision[0].getPos().posY - collision[0].getSize().height/2 && !this.laddering) {
+                if (this.cy + this.getRadius() > collision[0].getPos().posY - collision[0].getSize().height/2 && !this.laddering && this.specialBarrel) {
                     this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
                 }
                 //Turn around after falling
-                if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24) {
+                if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24 && !this.specialBarrel) {
                     this.direction *= -1;
                     this.ladderTime = 0;
 
@@ -255,11 +266,6 @@ Barrel.prototype.update = function (du) {
         this.goDownLadder = false;
     }
 
-    if (this.cy > 350) {
-        this.specialBarrel;
-        c
-    }
-    if (this.specialBarrel) this.laddering = true;
     spatialManager.register(this);
 
 } 

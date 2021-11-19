@@ -469,8 +469,7 @@ Mario.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = -this._scale;
-    this.version = 17;
-    this._draw(ctx);
+git    this._draw(ctx);
    // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
     this.sprite.scale = origScale;
 };

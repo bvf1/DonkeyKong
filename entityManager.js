@@ -312,6 +312,7 @@ render: function(ctx) {
     
     var debugX = 10, debugY = 100;
 
+    this._kong.render(ctx);
 
     for (var c = 0; c < this._categories.length; ++c) {
 
@@ -329,7 +330,6 @@ render: function(ctx) {
         }
         debugY += 10;
     }
-    this._kong.render(ctx);
     this._mario.render(ctx);
     this._pauline.render(ctx);
 }
