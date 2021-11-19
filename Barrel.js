@@ -141,10 +141,10 @@ Barrel.prototype.normalMovement = function (du) {
 
     var aveVelY = (oldVelY + this.velY) / 2;
     //Need this so barrels don't fall off world in some instances
-    if (this.fallingTime > 4 && !this.specialBarrel) {
+    if (this.fallingTime > du*6 && !this.specialBarrel) {
         this.cx += this.direction*BARREL_SPEED/4*du;
     }
-    if (!this.laddering && this.fallingTime < 4) {
+    if (!this.laddering && this.fallingTime < du*6) {
         this.cx += this.direction*BARREL_SPEED*du;
     }
     this.cy += aveVelY * 0.005*SECS_TO_NOMINALS;
@@ -188,7 +188,7 @@ Barrel.prototype.update = function (du) {
             if (collision[0].tag === "Brick") {
 
                 //Stop laddering after a certain period so barrel doesn't fall through the world
-                if (this.ladderTime > 12 && !this.specialBarrel) {
+                if (this.ladderTime > du*24 && !this.specialBarrel) {
                     this.laddering = false;
                 }
                 //Don't clip through the floor
@@ -196,7 +196,7 @@ Barrel.prototype.update = function (du) {
                     this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
                 }
                 //Turn around after falling
-                if (this.falling && this.fallingTime > 12 && !this.starting || this.ladderTime > 12 && !this.specialBarrel) {
+                if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24 && !this.specialBarrel) {
                     this.direction *= -1;
                     this.ladderTime = 0;
 
