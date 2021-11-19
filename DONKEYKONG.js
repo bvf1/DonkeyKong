@@ -142,7 +142,7 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
-   git if (gameOver === "true") return;
+    if (gameOver === "true") return;
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
