@@ -50,7 +50,7 @@ Barrel.prototype.laddering = false;
 Barrel.prototype.ladderTime = 0;
 Barrel.prototype.falling = false;
 Barrel.prototype.fallingTime = 0;
-Barrel.prototype.goesDownNext = false;
+Barrel.prototype.specialBarrel = false;
 
 
 // Initial, inheritable, default values
@@ -146,13 +146,13 @@ Barrel.prototype.normalMovement = function (du) {
 
     var aveVelY = (oldVelY + this.velY) / 2;
     //Need this so barrels don't fall off world in some instances
-    if (this.fallingTime > du*6) {
+    if (this.fallingTime > du*6 &&!this.specialBarrel) {
         this.cx += this.direction*BARREL_SPEED/4*du;
     }
     if (!this.laddering && this.fallingTime < du*6) {
         this.cx += this.direction*BARREL_SPEED*du;
     }
-    this.cy += aveVelY * du;
+    this.cy += aveVelY * 0.005*SECS_TO_NOMINALS;
 
 }
 Barrel.prototype.switch = false;
@@ -162,8 +162,7 @@ Barrel.prototype.update = function (du) {
     if (this.goDownLadder && Math.random() > 0.9 && !this.laddering) this.laddering = true;
     this.normalMovement(du);
 
-    if (this.laddering) {
-        console.log("ladderigb");
+    if (this.laddering || this.specialBarrel) {
         if (!this.switch) {this.version = 4; this.switch = true}
         
         
@@ -179,9 +178,11 @@ Barrel.prototype.update = function (du) {
     if (collision) {
         //Check collision with brick
         if (collision[0]) {
+            console.log(collision[0]);
             if (collision[0].tag === "Brick") {
+
                 //Stop laddering after a certain period so barrel doesn't fall through the world
-                if (this.ladderTime > du*24) {
+                if (this.ladderTime > du*24 && !this.specialBarrel) {
                     this.laddering = false;
                 }
                 //Don't clip through the floor
@@ -192,12 +193,14 @@ Barrel.prototype.update = function (du) {
                 if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24) {
                     this.direction *= -1;
                     this.ladderTime = 0;
+
                 }
                 this.starting = false;
                 this.falling = false;
                 this.fallingTime = 0;
                 if (!this.laddering) {
                     this.velY = 0;
+
                 }
             }
         }
@@ -218,15 +221,17 @@ Barrel.prototype.update = function (du) {
                     this.cx < pos.posX + size.width/2 + 2 &&
                     !this.laddering) {
                     this.goDownLadder = true;
-                    this.goesDownNext = true;
+
                 }
                 else {
                     this.goDownLadder = false;
+
                 }
             }
         }
         else {
             this.goDownLadder = false;
+
         }
         
         //check collsion with oil barrel
@@ -250,7 +255,11 @@ Barrel.prototype.update = function (du) {
         this.goDownLadder = false;
     }
 
-    
+    if (this.cy > 350) {
+        this.specialBarrel;
+        c
+    }
+    if (this.specialBarrel) this.laddering = true;
     spatialManager.register(this);
 
 } 

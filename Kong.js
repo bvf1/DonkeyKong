@@ -18,6 +18,7 @@ function Kong(descr) {
 
 Kong.prototype = new Entity();
 Kong.prototype.allowGenerate = true;
+Kong.prototype.allowSpecialBarrel = true;
 
 
 Kong.prototype._draw = function(ctx) {
@@ -28,6 +29,7 @@ Kong.prototype._draw = function(ctx) {
     // straight on no barrel
     
     if (this.version == 0 || !entityManager._mario.getAliveStatus()) {
+        
 
         sourceX = imageWidth*2;
         sourceY = imageHeight*1;
@@ -39,6 +41,12 @@ Kong.prototype._draw = function(ctx) {
     }
     // straight on barrel
     else if (this.version == 2) {
+
+        if (this.allowSpecialBarrel) {
+            entityManager.generateBarrel({cx : this.cx+100, cy : 98,specialBarrel : true});
+            this.allowSpecialBarrel = false;
+            this.version = 0;
+        }
         sourceX = imageWidth*2;
         sourceY = -4;
     }
@@ -48,7 +56,7 @@ Kong.prototype._draw = function(ctx) {
         sourceX = (imageWidth*4)+2;
         sourceY = imageHeight*1;
         var cx = this.cx + imageWidth*2;
-        if (this.allowGenerate == true) entityManager.generateBarrel({cx : cx, cy : 98});
+    //    if (this.allowGenerate === true) entityManager.generateBarrel({cx : cx, cy : 98});
 
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
