@@ -65,10 +65,18 @@ function gatherInputs() {
 var g_stopscreen = false;
 var timer1 = new util.Timer(0.5*SECS_TO_NOMINALS);
 var timer2 = new util.Timer(2*SECS_TO_NOMINALS);
+var text = "";
+var gameOver = false;
 
 function updateSimulation(du) {
     
     processDiagnostics();
+
+
+    var text = entityManager._mario.lives + " Lifes left";
+
+
+
     if (g_stopscreen == false)
     entityManager.update(du);
     else {
@@ -88,6 +96,7 @@ function updateSimulation(du) {
                     entityManager._mario.newLife();
                     g_stopscreen = false;
                     timer1 = new util.Timer(0.5*SECS_TO_NOMINALS);
+                    
                 }
                 break;
           //  case:
@@ -133,10 +142,42 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
+    if (gameOver === "true") return;
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
+
+
+
+
+
+    var oldStyle = ctx.fillStyle;
+    ctx.font = "18px Verdana";
+    ctx.fillText(entityManager._mario.lives + " Lifes Left", 400, 20);
+    ctx.fillText("Score :    " + entityManager._mario.score, 400, 40);
+
+
+    ctx.fillStyle = oldStyle;
+
+
+
+
+
+
+    if (entityManager._mario.lives === 0) {
+        ctx.font = "50px Georgia";
+        entityManager._mario.lives = 3;
+        entityManager._mario.score = 0;
+        gameOver = true;
+
+        util.clearCanvas(ctx);
+        ctx.fillText("Game Over !", 120, 230);
+    }
+
+
+
 }
+
 
 
 // =============

@@ -50,6 +50,8 @@ Mario.prototype.floor = 0;
 Mario.prototype.hasHammer = false;
 Mario.prototype.status = "alive";
 Mario.prototype.version = 12;
+Mario.prototype.lives = 3;
+Mario.prototype.score = 0;
 
 var NOMINAL_GRAVITY = 0.12;
 
@@ -78,6 +80,7 @@ Mario.prototype.dies = function () {
     this.version = 19;
     g_stopscreen = true;
     this.timer = new util.Timer(1.3*SECS_TO_NOMINALS);
+    this.lives -= 1;
 
 }
 // stop game while mario dies

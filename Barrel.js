@@ -259,6 +259,7 @@ Barrel.prototype.update = function (du) {
             if (collision[4].tag === "Hammer") {
                 collision[4].kill();
                 this.kill();
+                entityManager._mario.score += 100;
             }
         }
     }
