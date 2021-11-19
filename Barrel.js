@@ -120,16 +120,15 @@ Barrel.prototype.normalMovement = function (du) {
     this.velY += GRAVITY;
 
     var aveVelY = (oldVelY + this.velY) / 2;
-
-    if (!this.laddering) {
-        this.cx +=  this.direction*BARREL_SPEED*du;
+    //Need this so barrels don't fall off world in some instances
+    if (this.fallingTime > du*6) {
+        this.cx += this.direction*BARREL_SPEED/4*du;
+    }
+    if (!this.laddering && this.fallingTime < du*6) {
+        this.cx += this.direction*BARREL_SPEED*du;
     }
     this.cy += aveVelY * du;
 
-}
-
-Barrel.prototype.downMovement = function (du) {
-    
 }
 
 Barrel.prototype.update = function (du) {
