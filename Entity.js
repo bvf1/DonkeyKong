@@ -102,6 +102,7 @@ Entity.prototype.version = 0;
 
 // cycles through 
 Entity.prototype.cycleVersions = function (du, maxTime, startV, endV) {
+
     this.time += du;
     if (this.time > maxTime*SECS_TO_NOMINALS) {
         this.time = 0;

@@ -30,6 +30,7 @@ function Barrel(descr) {
 
     this._width = this.sprite.width;
     this._height = this.sprite.height;
+
     
 
     spatialManager.register(this);   
@@ -49,6 +50,7 @@ Barrel.prototype.laddering = false;
 Barrel.prototype.ladderTime = 0;
 Barrel.prototype.falling = false;
 Barrel.prototype.fallingTime = 0;
+Barrel.prototype.goesDownNext = false;
 
 
 // Initial, inheritable, default values
@@ -61,45 +63,70 @@ this.warpSound.play();*/
 
 
 Barrel.prototype.getSize = function () {
-    return { 
-        width : this._width, 
-        height : this.height
-    }
-
-};
+    if (!this.laddering) return null;
+    return {
+        width : this._width-10,
+        height: this._height
+    };
+}
 
 Barrel.prototype.getRadius = function () {
-    return this._width/4-2;
+    return this._width/4-5;
 };
 
 
 
 Barrel.prototype._draw = function (ctx) {
-    var imageWidth = (this._width/4);
+    var imageWidth;
     var imageHeight = this._height/2;
     var sourceX;
     var sourceY;
+    var diffx = 0;
+    var diffw = 1;
+
+    imageWidth = (this._width/2);
     if (this.version == 0) {
+        imageWidth = (this._width/4);
+        
         sourceX = 0;
         sourceY = 0;
     }
     else if (this.version == 1) {
+        imageWidth = (this._width/4);
         sourceX = imageWidth*1;
         sourceY = 0;
 
     }
     else if (this.version == 2) {
+        imageWidth = (this._width/4);
         sourceX = imageWidth*1;
         sourceY = imageHeight*1;
 
     }
     else if (this.version == 3) {
+        imageWidth = (this._width/4);
         sourceX = 0;
         sourceY = imageHeight*1;
     }
+    else if (this.version == 4) {
+        imageWidth = (this._width/2);
+        sourceX = imageWidth*1;
+        sourceY = imageHeight*0;
+        diffx = -15;
+        diffw = 3;
+
+    }
+    else if (this.version == 5) {
+        imageWidth = (this._width/2);
+        sourceX = imageWidth*1;
+        sourceY = imageHeight*1;
+        diffx = -15;
+        diffw = 3;
+    }
 
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
-                                 this.cx-imageWidth, this.cy-imageHeight, 30,30);
+                                 this.cx-imageWidth-2+diffx, this.cy-imageHeight-3, 30*diffw,30);
+   
 }
 
 
@@ -128,7 +155,7 @@ Barrel.prototype.normalMovement = function (du) {
     this.cy += aveVelY * du;
 
 }
-
+Barrel.prototype.switch = false;
 Barrel.prototype.update = function (du) {
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -136,22 +163,18 @@ Barrel.prototype.update = function (du) {
     this.normalMovement(du);
 
     if (this.laddering) {
+        console.log("ladderigb");
+        if (!this.switch) {this.version = 4; this.switch = true}
+        
+        
         this.ladderTime += du;
+        this.cycleVersions(du,0.03,4,5);
+    }
+    else {
+        this.cycleVersions(du, 0.1, 0, 3);
+
     }
 
-    this.time += du;
-    if (this.time > 5) {
-
-
-        this.time = 0;
-        this.version += 1;
-
-        if (this.version === 3){
-            
-            this.version = 0;
-        }
-
-    }
     var collision = this.isColliding();
     if (collision) {
         //Check collision with brick
@@ -195,6 +218,7 @@ Barrel.prototype.update = function (du) {
                     this.cx < pos.posX + size.width/2 + 2 &&
                     !this.laddering) {
                     this.goDownLadder = true;
+                    this.goesDownNext = true;
                 }
                 else {
                     this.goDownLadder = false;
@@ -226,13 +250,6 @@ Barrel.prototype.update = function (du) {
         this.goDownLadder = false;
     }
 
-
-    //change version of barrel
-    if (!this._isDeadNow) {
-        this.cycleVersions(du, 0.1, 0, 3);
-    }
-    else return entityManager.KILL_ME_NOW;
-        
     
     spatialManager.register(this);
 
@@ -241,9 +258,9 @@ Barrel.prototype.update = function (du) {
 Barrel.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale; 
-
     this._draw(ctx);
     this.sprite.scale = origScale;
+
 };
        // Sprite.prototype.drawPartialImage = function (ctx, sx, sy, sWidth, sHeight, cx, cy, dWidth, dHeight) {
 //

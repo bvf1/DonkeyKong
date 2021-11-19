@@ -31,6 +31,7 @@ function createInitialObjects() {
     // Might change in the near future due to more saucy barrels 
     // being added in the near future
     entityManager.makeBarrels();
+  //  entityManager.generateBarrel({cx : 30, cy : 30});
     entityManager.generateOil({cx : 30, cy : 456});
     entityManager.makeHammers();
 

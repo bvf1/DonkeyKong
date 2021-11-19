@@ -96,12 +96,19 @@ findEntityInRange: function(posX, posY, radius) {
             var size = e.entity.getSize();
             var pos = e.entity.getPos();
             var entRadius = e.entity.getRadius();
-            if (util.dist(posX, pos.posX) < radius + entRadius &&
-                util.dist(posY, pos.posY) < radius + entRadius)
-
-           //* if (pos.posX > posX-radius && pos.posX < posX+radius && pos.posY > posY-radius && pos.posY < posY+radius)
-           {  entitiesInRange[3] = e.entity;}
-        } 
+            if (size === null) {
+                if (util.dist(posX, pos.posX) < radius + entRadius &&
+                    util.dist(posY, pos.posY) < radius + entRadius)
+                    entitiesInRange[3] = e.entity;
+                
+            }
+            else if (posX > pos.posX &&
+                posX < pos.posX + size.width &&
+                posY > pos.posY - size.height &&
+                posY < pos.posY) {
+                entitiesInRange[3] = e.entity;
+            }
+        }
         if (e.entity.tag === "Hammer") {
             var pos = e.entity.getPos();
             if (pos.posX > posX-radius && pos.posX < posX+radius &&
@@ -130,6 +137,12 @@ render: function(ctx) {
         if (e.entity.tag === "Ladder") {
             var size = e.entity.getSize();
             util.strokeBox(ctx, e.posX, e.posY-size.height, size.width, size.height, "red");
+        }
+        else if (e.entity.tag === "Barrel") {
+            var size = e.entity.getSize();
+            var entRadius = e.entity.getRadius();
+            if (size === null) util.strokeCircle(ctx, e.posX, e.posY, entRadius);
+            else util.strokeBox(ctx, e.posX-size.width/2, e.posY-size.height/2, size.width, size.height, "red");
         }
         else {
             util.strokeCircle(ctx, e.posX, e.posY, e.radius);
