@@ -37,8 +37,8 @@ function Oil(descr) {
 
 Oil.prototype = new Entity();
 Oil.prototype.tag = "Oil";
-Oil.prototype.version = 0;
-Oil.prototype.time = 0;
+Oil.prototype.isLit = false;
+
 
 
 
@@ -51,9 +51,8 @@ Oil.prototype.time = 0;
 this.warpSound.play();*/
     
 
-
 Oil.prototype.getRadius = function () {
-    return this._width/2;
+    return this._width/3;
 };
 
 Oil.prototype.getSize = function() {
@@ -70,9 +69,18 @@ Oil.prototype.getPos = function() {
         posY : this.cy
     }
 }
+Oil.prototype.start = function () {
+    this.isLit = true;
+    this.version = 0;
+}
+Oil.prototype.stop = function () {
+    this.isLit = false;
+    this.version = 2;
+}
 
 Oil.prototype._draw = function(ctx) {
-    var imageWidth = this._width/2;
+    if (!this.isLit) this.version = 2;
+    var imageWidth = this._width/3;
     var sourceX = imageWidth*this.version;
 
    // this.sprite.drawPartialImage(ctx, this._width, this._height, 
@@ -83,19 +91,15 @@ Oil.prototype._draw = function(ctx) {
 }
 
 Oil.prototype.update = function (du) {
-    this.time += du;
+    spatialManager.unregister(this);   
+
+
+    this.cycleVersions(du,3,0,1);
+
+    spatialManager.register(this);   
 
 
 
-    if (this.time > 5) {
-
-        this.time = 0;
-        this.version +=1;
-
-        if (this.version === 2) {
-            this.version = 0;
-        }
-    }
     
 };
 
