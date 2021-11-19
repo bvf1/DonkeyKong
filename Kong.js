@@ -42,7 +42,7 @@ Kong.prototype._draw = function(ctx) {
     // straight on barrel
     else if (this.version == 2) {
         if (this.allowSpecialBarrel) {
-            entityManager.generateBarrel({cx : this.cx+53, cy : this.cy+this._height/2+10,specialBarrel : true});
+        //    entityManager.generateBarrel({cx : this.cx+53, cy : this.cy+this._height/2+10,specialBarrel : true});
             this.allowSpecialBarrel = false;
             this.version = 0;
         }
@@ -57,7 +57,7 @@ Kong.prototype._draw = function(ctx) {
         sourceX = (imageWidth*4)+2;
         sourceY = imageHeight*1;
         var cx = this.cx + imageWidth*2;
-        if (this.allowGenerate === true) entityManager.generateBarrel({cx : cx, cy : 98});
+      //  if (this.allowGenerate === true) entityManager.generateBarrel({cx : cx, cy : 98});
 
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);

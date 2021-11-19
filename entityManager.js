@@ -69,6 +69,7 @@ init: function() {
 itsaMe : function() {
     this._mario = new Mario({cx : 72, cy : 460});
     //this._mario = new Mario({cx : 400, cy : 80});
+    this._mario.version = 3;
 
 },
 

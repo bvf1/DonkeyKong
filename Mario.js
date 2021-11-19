@@ -128,11 +128,14 @@ Mario.prototype.update = function (du) {
     }
     //walking left
     if(keys[this.KEY_LEFT]) {
-        this.cycleVersions(du, 0.1, 0, 2)
+        if (!this.hasHammer) this.cycleVersions(du, 0.09, 0, 2)
+        else this.cycleVersions(du, 0.09, 6, 8);
     }
     //walking right
     else if(keys[this.KEY_RIGHT]) {
-        this.cycleVersions(du, 0.1, 3, 5)
+        if (!this.hasHammer) this.cycleVersions(du, 0.09, 3, 5);
+        
+        else  this.cycleVersions(du, 0.09, 9, 11);
     }
 
     /*//climbing
@@ -143,16 +146,15 @@ Mario.prototype.update = function (du) {
         this.cycleVersions(du, 0.1, 14, 16)
     }*/
 
-    //walking with hammer - right
-    if(this.hasHammer !== false) {
-        if(keys[this.KEY_RIGHT])
-            this.cycleVersions(du, 0.09, 9, 11)
+    //walking with hammer - right/
+
+
+    //stays still
+    if(this.hasHammer !== false && !keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
+        if (this.velX > 0) this.cycleVersions(du, 0.09, 9, 11);
+        else this.cycleVersions(du, 0.09, 6, 8);
     }
-    //walking with hammer - left
-    else if(this.hasHammer !== false) {
-        if(this(keys[this.KEY_LEFT]))
-            this.cycleVersions(du, 0.09, 6, 8)
-    }
+    
 
 
    // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -200,6 +202,8 @@ Mario.prototype.handleCollision = function () {
         if (collision[4]) {
             if (collision[4].tag === "Hammer") {
                 this.hasHammer = true;
+                if (this.velX > 0) this.version = 9;
+                else this.version = 6;
                 collision[4].inUse();
             }
         }
@@ -476,6 +480,8 @@ Mario.prototype.drawDeadMario = function (ctx) {
 
 }
 Mario.prototype.render = function (ctx) {
+    if (this.velX > 0) console.log("bigger than");
+   // if (this.hasHammer) console.log("has hammer "+ this.version )
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = -this._scale;
