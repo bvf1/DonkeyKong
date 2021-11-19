@@ -143,6 +143,16 @@ Mario.prototype.update = function (du) {
         this.cycleVersions(du, 0.1, 14, 16)
     }*/
 
+    //walking with hammer - right
+    if(this.hasHammer !== false) {
+        if(keys[this.KEY_RIGHT])
+            this.cycleVersions(du, 0.09, 9, 11)
+    }
+    //walking with hammer - left
+    else if(this.hasHammer !== false) {
+        if(this(keys[this.KEY_LEFT]))
+            this.cycleVersions(du, 0.09, 6, 8)
+    }
 
 
    // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
