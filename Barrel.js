@@ -147,7 +147,7 @@ Barrel.prototype.normalMovement = function (du) {
     if (!this.laddering && this.fallingTime < du*6) {
         this.cx += this.direction*BARREL_SPEED*du;
     }
-    this.cy += aveVelY * 0.005*SECS_TO_NOMINALS;
+    this.cy += aveVelY * du;
 
 }
 Barrel.prototype.switch = false;
@@ -211,6 +211,7 @@ Barrel.prototype.update = function (du) {
             }
         }
         else {
+            this.fallingTime += du;
             this.falling = true;
         }
         //check collision with ladder
@@ -250,7 +251,7 @@ Barrel.prototype.update = function (du) {
         //check collision with hammer
         if (collision[4]) {
             if (collision[4].tag === "Hammer") {
-                collision[4].dies();
+                collision[4].kill();
                 this.kill();
             }
         }

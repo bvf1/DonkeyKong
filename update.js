@@ -34,7 +34,6 @@ function update(dt) {
         console.log("Big dt =", dt, ": CLAMPING TO NOMINAL");
         dt = NOMINAL_UPDATE_INTERVAL;
     }
-    
     // If using variable time, divide the actual delta by the "nominal" rate,
     // giving us a conveniently scaled "du" to work with.
     //
