@@ -17,7 +17,6 @@ function Kong(descr) {
 
 
 Kong.prototype = new Entity();
-Kong.prototype.version = 0;
 Kong.prototype.allowGenerate = true;
 
 
@@ -27,7 +26,9 @@ Kong.prototype._draw = function(ctx) {
     var sourceX;
     var sourceY;
     // straight on no barrel
-    if (this.version == 0) {
+    
+    if (this.version == 0 || !entityManager._mario.getAliveStatus()) {
+
         sourceX = imageWidth*2;
         sourceY = imageHeight*1;
     }
@@ -47,7 +48,7 @@ Kong.prototype._draw = function(ctx) {
         sourceX = (imageWidth*4)+2;
         sourceY = imageHeight*1;
         var cx = this.cx + imageWidth*2;
-        if (this.allowGenerate == true)entityManager.generateBarrel({cx : cx, cy : 98});
+        if (this.allowGenerate == true) entityManager.generateBarrel({cx : cx, cy : 98});
 
     }
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, this.cx, this.cy, 100,100);
@@ -56,18 +57,9 @@ Kong.prototype._draw = function(ctx) {
 
 Kong.prototype.time = 0;
 Kong.prototype.update = function (du) {
-    this.time += du;
-    if (this.time > 60) {
-
-        this.time = 0;
-        this.version += 1;
-
-        if (this.version == 4){
-            this.allowGenerate = true;
-
-            this.version = 0;
-        }
-    }
+    this.cycleVersions(du, 0.5, 0, 3);
+    if (this.version === 0) this.allowGenerate = true;
+    
 
 } 
 

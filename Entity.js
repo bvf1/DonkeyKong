@@ -32,6 +32,12 @@ function Entity() {
 
 };
 
+
+
+Entity.prototype.getVersion = function () {
+    return this.version;
+};
+
 Entity.prototype.setup = function (descr) {
     // Apply all setup properies from the (optional) descriptor
     for (var property in descr) {
@@ -45,6 +51,8 @@ Entity.prototype.setup = function (descr) {
     this._isDeadNow = false;
 };
 
+
+
 Entity.prototype.setPos = function (cx, cy) {
     this.cx = cx;
     this.cy = cy;
@@ -57,6 +65,9 @@ Entity.prototype.getPos = function () {
 Entity.prototype.getRadius = function () {
     return 0;
 };
+Entity.prototype.getVersion = function () {
+    return this.version;
+}
 
 Entity.prototype.getSpatialID = function () {
     return this._spatialID;
@@ -84,15 +95,20 @@ Entity.prototype.wrapPosition = function () {
     this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };
 
-Entity.prototype.time = 0; 
-Entity.prototype.getVersion = function (du, maxTime, version, maxVersions) {
+Entity.prototype.time = 0;
+Entity.prototype.version = 0;
 
+
+
+// cycles through 
+Entity.prototype.cycleVersions = function (du, maxTime, startV, endV) {
     this.time += du;
-    if (this.time > maxTime) {
+    if (this.time > maxTime*SECS_TO_NOMINALS) {
         this.time = 0;
-        version += 1;
-        if (version == maxVersions) return 0;
-    }
-    return version;
+        this.version += 1;
+        if (this.version > endV) this.version = startV;
+        return true;
+    };
+    return false;
 
 }

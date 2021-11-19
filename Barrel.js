@@ -38,7 +38,6 @@ function Barrel(descr) {
 
 Barrel.prototype = new Entity();
 Barrel.prototype.tag = "Barrel"
-Barrel.prototype.version = 0;
 Barrel.prototype.time = 0;
 // barrel 
 Barrel.prototype.direction = +1;
@@ -66,7 +65,6 @@ Barrel.prototype.getSize = function () {
 Barrel.prototype.getRadius = function () {
     return this._width/4-2;
 };
-
 
 
 
@@ -132,19 +130,8 @@ Barrel.prototype.update = function (du) {
     
     if (this.goDownStairs) this.downMovement(du);
     this.normalMovement(du);
-    this.time += du;
-    if (this.time > 5) {
 
-
-        this.time = 0;
-        this.version += 1;
-
-        if (this.version === 3){
-            
-            this.version = 0;
-        }
-
-    }
+    
 
 
     var collision = this.isColliding();
@@ -175,9 +162,16 @@ Barrel.prototype.update = function (du) {
                 this.kill();
             }
         }
-        if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     }
 
+
+    //change version of barrel
+    if (!this._isDeadNow) {
+        this.cycleVersions(du, 0.1, 0, 3);
+    }
+    else return entityManager.KILL_ME_NOW;
+        
+    
     spatialManager.register(this);
 
 } 

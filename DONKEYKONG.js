@@ -60,14 +60,47 @@ function gatherInputs() {
 
 
 // GAME-SPECIFIC UPDATE LOGIC
+var g_stopscreen = false;
+var timer1 = new util.Timer(0.5*SECS_TO_NOMINALS);
+var timer2 = new util.Timer(2*SECS_TO_NOMINALS);
 
 function updateSimulation(du) {
     
     processDiagnostics();
-    
+    if (g_stopscreen == false)
     entityManager.update(du);
+    else {
+        var status = entityManager._mario.status;
+        switch (status) {
+            // timer to freze screen right after dying
+            case "dying":
+                if (timer1.tick(du)) {
+                    entityManager._mario.waiting();
+                    g_stopscreen = false;
+                    timer2 = new util.Timer(2*SECS_TO_NOMINALS);
+                }
+                break;
+            // timer for showing dead mario
+            case "waiting":
+                if (timer2.tick(du)) {
+                    entityManager._mario.newLife();
+                    g_stopscreen = false;
+                    timer1 = new util.Timer(0.5*SECS_TO_NOMINALS);
+                }
+                break;
+          //  case:
+
+
+        }
+       /* if (timer.tick(du)) {
+            entityManager._mario.newLife();
+            g_stopscreen = false;
+        }*/
+
+    }
 
 }
+
 
 // GAME-SPECIFIC DIAGNOSTICS
 

@@ -111,6 +111,16 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = style;
     ctx.fillRect(x, y, w, h);
     ctx.fillStyle = oldStyle;
+},
+
+Timer: class {
+    countdown;
+    time = 0;
+    constructor(countdown) {this.countdown = countdown;}
+    tick(time) { 
+        this.time += time;
+        return this.countdown < this.time;
+     }
 }
 
 };

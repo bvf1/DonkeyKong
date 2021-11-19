@@ -47,8 +47,8 @@ Mario.prototype.climbing = false;
 Mario.prototype.tag = "Mario";
 
 Mario.prototype.floor = 0;
-Mario.prototype.version = 0;
 Mario.prototype.hasHammer = false;
+Mario.prototype.status = "alive";
 
 var NOMINAL_GRAVITY = 0.12;
 
@@ -103,23 +103,42 @@ Mario.prototype.setPos = function(cx, cy) {
     this.cx = cx;
     this.cy = cy;
 }
-
-Mario.prototype.getVersion = function () {
-    return this.version;
+Mario.prototype.getAliveStatus = function() {
+    return this.status === "alive";
 }
+
 Mario.prototype.reset = function () {
     // Remember my reset positions
     this.setPos(this.reset_cx, this.reset_cy);
-};
-
-Mario.prototype.dies = function () {
-    entityManager.reset();
-    this.reset();
-    entityManager.makeHammers();
 }
+//mario just died
+Mario.prototype.dies = function () {
 
+    this.status = "dying"
+    g_stopscreen = true;
+    this.timer = new util.Timer(1.3*SECS_TO_NOMINALS);
+
+}
+// stop game while mario dies
+Mario.prototype.waiting = function () {
+  //  this.status = "waiting"
+
+
+    entityManager.reset();
+    this.version = 20;
+}
+Mario.prototype.newLife = function () {
+    this.status = "alive";
+    this.version = 3;
+    entityManager.makeHammers();
+    this.reset();
+
+
+}
+Mario.prototype.timer;
 
 Mario.prototype.update = function (du) {
+
     spatialManager.unregister(this);
 
     var accelX = this.computeWalk();
@@ -158,9 +177,13 @@ Mario.prototype.update = function (du) {
             this.allowClimb = false;
             this.climbing = false;
         }
+
+        // Mario dies when colliding with Barrel
         if (collision[3]) {
             if (collision[3].tag === "Barrel") {
+
                 this.dies();
+
             }
         }
         if (collision[4]) {
@@ -176,10 +199,26 @@ Mario.prototype.update = function (du) {
         this.climbing = false;
     }
 
-    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    if (this.status === "dying") {
+        // shows the different dead pictures
+        this.cycleVersions(du, 0.2, 19, 22);
+        if (this.timer.tick(du)) {
+            // mario is dead
+            this.version = 23;
+            g_stopscreen = true;
+            this.status = "waiting";
+        }
+
+    }
+
+
+   // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     spatialManager.register(this);
 
 }
+    
+
+
 
 var MAX_SPEED = 2.5;
 
@@ -258,31 +297,31 @@ Mario.prototype.drawWalking = function(ctx)  {
     var sourceY;
     
     // left 1
-    if (this.version == 0) {
+    if (this.version === 0) {
         imageWidth = this._width/8+4;
         sourceX = imageWidth*1;
         sourceY = 0;
     }
     // left 2
-    else if (this.version == 1)  {
+    else if (this.version === 1)  {
         imageWidth = this._width/8+2;
         sourceX = imageWidth*2;
         sourceY = 0;
     }  
     // left 3
-    else if (this.version == 2)  {
+    else if (this.version === 2)  {
         imageWidth = this._width/8;
         sourceX = imageWidth*3;
         sourceY = 0;
     } 
     // right 1
-    else if (this.version == 3) {
+    else if (this.version === 3) {
         imageWidth = this._width/8;
         sourceX = imageWidth*4;
         sourceY = 0;
     }
     // right 2
-    else if (this.version == 4)  {
+    else if (this.version === 4)  {
         imageWidth = this._width/8-1;
         sourceX = imageWidth*5;
         sourceY = 0;
@@ -397,11 +436,15 @@ Mario.prototype.drawDeadMario = function (ctx) {
     else if (this.version === 22) {
         sourceX = imageWidth*3;
     } 
+    else if (this.version === 23) {
+        sourceX = imageWidth*0-2
+        sourceY = imageHeight*4
+    }
     
 
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
-        this.cx-this._realWidth/2-4, this.cy-this._realHeight/2, 
-        this._realWidth+20,this._realHeight);
+        this.cx-this._realWidth/2-4, this.cy-this._realHeight/2-10, 
+        this._realWidth+12,this._realHeight+12);
 
 }
 Mario.prototype.render = function (ctx) {
