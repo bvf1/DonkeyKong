@@ -49,6 +49,7 @@ Mario.prototype.tag = "Mario";
 Mario.prototype.floor = 0;
 Mario.prototype.hasHammer = false;
 Mario.prototype.status = "alive";
+Mario.prototype.version = 12;
 
 var NOMINAL_GRAVITY = 0.12;
 
@@ -72,7 +73,9 @@ Mario.prototype.reset = function () {
 //mario just died
 Mario.prototype.dies = function () {
 
+    this.hasHammer = false;
     this.status = "dying"
+    this.version = 19;
     g_stopscreen = true;
     this.timer = new util.Timer(1.3*SECS_TO_NOMINALS);
 
@@ -95,9 +98,12 @@ Mario.prototype.newLife = function () {
 }
 Mario.prototype.timer;
 
+
+
 //UPDATE & COLLISIONS
 
 Mario.prototype.update = function (du) {
+
 
     spatialManager.unregister(this);
 
@@ -138,22 +144,29 @@ Mario.prototype.update = function (du) {
         else  this.cycleVersions(du, 0.09, 9, 11);
     }
 
-    /*//climbing
-    if(keys[this.KEY_UP]) {
-        this.cycleVersions(du, 0.1, 14, 16)
-    }
-    else if(keys[this.KEY_DOWN]) {
-        this.cycleVersions(du, 0.1, 14, 16)
-    }*/
 
-    //walking with hammer - right/
-
-
-    //stays still
+    // stays still
     if(this.hasHammer !== false && !keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
         if (this.velX > 0) this.cycleVersions(du, 0.09, 9, 11);
         else this.cycleVersions(du, 0.09, 6, 8);
     }
+
+    //climbing
+
+    if ((keys[this.KEY_UP] || keys[this.KEY_DOWN]) && this.climbing)
+    {
+       this.cycleVersions(du, 0.1, 12, 13)
+    }
+/*
+    if(keys[this.KEY_UP] && this.climbing) {
+        this.cycleVersions(du, 0.01, 14, 16)
+    }
+    else if(keys[this.KEY_DOWN] && this.climbing) {
+        this.cycleVersions(du, 0.10, 14, 16)
+    }*/
+
+
+
     
 
 
@@ -169,6 +182,8 @@ Mario.prototype.handleCollision = function () {
         if (collision[0]) {
             if (collision[0].tag === "Brick") {
                 this.grounded = true;
+                this.nearEdge = false;
+
                 //Step onto the platforms, might need to change in order to make ladders work well
                 if (this.cy + this.getRadius() > collision[0].getPos().posY - collision[0].getSize().height/2 && !this.jumping) {
                     this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
@@ -182,8 +197,10 @@ Mario.prototype.handleCollision = function () {
             this.grounded = false;
         }
         if (collision[1]) {
-            if (collision[1].tag === "Ladder" && !collision[1].broken) {
+            if (collision[1].tag === "Ladder" && !collision[1].broken && !this.hasHammer) {
+                
                 this.allowClimb = true;
+                if(!this.climbing) this.version = 12;
             }
         }
         else {
@@ -200,7 +217,7 @@ Mario.prototype.handleCollision = function () {
             }
         }
         if (collision[4]) {
-            if (collision[4].tag === "Hammer") {
+            if (collision[4].tag === "Hammer" && this.status === "alive" ) {
                 this.hasHammer = true;
                 if (this.velX > 0) this.version = 9;
                 else this.version = 6;
@@ -212,6 +229,7 @@ Mario.prototype.handleCollision = function () {
         this.grounded = false;
         this.allowClimb = false;
         this.climbing = false;
+
     }
 }
 
@@ -419,37 +437,44 @@ Mario.prototype.drawClimbing = function (ctx) {
     var sourceX;
     var sourceY = imageHeight*1;
     
-    
-    if (this.version === 12) {
+    // climb 1
+    if (this.version === 15) {
         sourceX = imageWidth*0;
     }
-    else if (this.version === 13) {
+    // climb 2
+    else if (this.version === 16) {
         sourceX = imageWidth*1;
     }
-    else if (this.version === 14) {
+    // climb 3
+    else if (this.version === 12) {
         sourceX = imageWidth*2;
     }
-    else if (this.version === 15) {
+    // climb 4
+    else if (this.version === 14) {
         sourceX = imageWidth*3;
     }
-    else if (this.version === 16) {
+    // climb 5
+    else if (this.version === 13) {
         sourceX = imageWidth*4;
     }
+    // climb 6
     else if (this.version === 17) {
         sourceX = imageWidth*5;
     }
+    // climb 7
     else if (this.version === 18) {
         sourceX = imageWidth*6;
     }
 
     this.sprite.drawPartialImage(ctx, sourceX, sourceY, imageWidth, imageHeight, 
-        this.cx-this._realWidth/1.2-3, this.cy-this._realHeight/3, 
-        this._realWidth+20,this._realHeight);
+        this.cx-this._realWidth/1.2-3, this.cy-this._realHeight-5, 
+        this._realWidth+20,this._realHeight*2.2);
 
 }
 
 
 Mario.prototype.drawDeadMario = function (ctx) {
+
     var imageWidth = this._width/8
     var imageHeight = this._height/6;
     var sourceX;
@@ -480,12 +505,8 @@ Mario.prototype.drawDeadMario = function (ctx) {
 
 }
 Mario.prototype.render = function (ctx) {
-    if (this.velX > 0) console.log("bigger than");
-   // if (this.hasHammer) console.log("has hammer "+ this.version )
     var origScale = this.sprite.scale;
-    // pass my scale into the sprite, for drawing
     this.sprite.scale = -this._scale;
     this._draw(ctx);
-   // this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation );
     this.sprite.scale = origScale;
 };

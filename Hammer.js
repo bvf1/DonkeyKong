@@ -70,17 +70,17 @@ Hammer.prototype.updateFromMario = function() {
 
 Hammer.prototype.update = function(du) {
     spatialManager.unregister(this);  
-  //  if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
     // for programming
     if (!this.isHanging) {
         this.time += du;
-        if (this.time > 15*SECS_TO_NOMINALS) {
+        if (this.time > 10*SECS_TO_NOMINALS) {
 
             
             this.time =0;
             console.log("kill hammer")
             this.kill();
+            entityManager._mario.hasHammer = false;
         }
         this.updateFromMario();
     }
