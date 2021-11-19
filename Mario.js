@@ -126,6 +126,23 @@ Mario.prototype.update = function (du) {
         }
 
     }
+    //walking left
+    if(keys[this.KEY_LEFT]) {
+        this.cycleVersions(du, 0.1, 0, 2)
+    }
+    //walking right
+    else if(keys[this.KEY_RIGHT]) {
+        this.cycleVersions(du, 0.1, 3, 5)
+    }
+
+    /*//climbing
+    if(keys[this.KEY_UP]) {
+        this.cycleVersions(du, 0.1, 14, 16)
+    }
+    else if(keys[this.KEY_DOWN]) {
+        this.cycleVersions(du, 0.1, 14, 16)
+    }*/
+
 
 
    // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
