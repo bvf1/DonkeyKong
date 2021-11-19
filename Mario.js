@@ -80,7 +80,6 @@ Mario.prototype.dies = function () {
     this.version = 19;
     g_stopscreen = true;
     this.timer = new util.Timer(1.3*SECS_TO_NOMINALS);
-    this.lives -= 1;
 
 }
 // stop game while mario dies
@@ -90,6 +89,7 @@ Mario.prototype.waiting = function () {
 
     entityManager.reset();
     this.version = 20;
+
 }
 Mario.prototype.newLife = function () {
     this.status = "alive";
@@ -98,6 +98,8 @@ Mario.prototype.newLife = function () {
     this.reset();
     entityManager._oil.stop();
     entityManager._kong.allowSpecialBarrel = true;
+    this.lives -= 1;
+
 
 }
 Mario.prototype.timer;
