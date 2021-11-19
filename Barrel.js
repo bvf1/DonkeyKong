@@ -48,6 +48,7 @@ Barrel.prototype.starting = true;
 Barrel.prototype.goDownLadder = false;
 Barrel.prototype.laddering = false;
 Barrel.prototype.ladderTime = 0;
+Barrel.prototype.ladderEnd = false;
 Barrel.prototype.falling = false;
 Barrel.prototype.fallingTime = 0;
 Barrel.prototype.specialBarrel = false;
@@ -141,7 +142,7 @@ Barrel.prototype.normalMovement = function (du) {
 
     var aveVelY = (oldVelY + this.velY) / 2;
     //Need this so barrels don't fall off world in some instances
-    if (this.fallingTime > du*6 && !this.specialBarrel) {
+    if (!this.laddering && this.fallingTime > du*6 && !this.specialBarrel) {
         this.cx += this.direction*BARREL_SPEED/4*du;
     }
     if (!this.laddering && this.fallingTime < du*6) {
@@ -172,8 +173,8 @@ Barrel.prototype.update = function (du) {
     if (this.laddering || this.specialBarrel) {
         if (!this.switch) {this.version = 4; this.switch = true}
         
-        
         this.ladderTime += du;
+
         this.cycleVersions(du,0.03,4,5);
     }
     else {
@@ -188,7 +189,7 @@ Barrel.prototype.update = function (du) {
             if (collision[0].tag === "Brick") {
 
                 //Stop laddering after a certain period so barrel doesn't fall through the world
-                if (this.ladderTime > du*24 && !this.specialBarrel) {
+                if (this.ladderEnd && !this.specialBarrel) {
                     this.laddering = false;
                 }
                 //Don't clip through the floor
@@ -196,9 +197,9 @@ Barrel.prototype.update = function (du) {
                     this.cy = collision[0].getPos().posY - collision[0].getSize().height/2 - this.getRadius();
                 }
                 //Turn around after falling
-                if (this.falling && this.fallingTime > du*24 && !this.starting || this.ladderTime > du*24 && !this.specialBarrel) {
+                if (this.falling && this.fallingTime > du*20 && !this.starting || this.ladderEnd && !this.specialBarrel) {
                     this.direction *= -1;
-                    this.ladderTime = 0;
+                    this.ladderEnd = false;
 
                 }
                 this.starting = false;
@@ -211,7 +212,12 @@ Barrel.prototype.update = function (du) {
             }
         }
         else {
-            this.fallingTime += du;
+            if (!this.laddering) {
+                this.fallingTime += du;
+            }
+            if (this.ladderTime > 6*du && this.laddering) {
+                this.ladderEnd = true;
+            }
             this.falling = true;
         }
         //check collision with ladder
