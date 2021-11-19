@@ -106,7 +106,7 @@ function updateSimulation(du) {
 
 // GAME-SPECIFIC DIAGNOSTICS
 
-var g_renderSpatialDebug = true;
+var g_renderSpatialDebug = false;
 var KEY_SPATIAL = keyCode('X');
 
 
