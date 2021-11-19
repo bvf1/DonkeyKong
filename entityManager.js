@@ -79,6 +79,10 @@ itsaDonkey : function() {
 itsaPauline : function() {
     this._pauline = new Pauline({cx: 190, cy: 55});
 },
+makeOil : function() {
+    this._oil = new Oil({cx : 30, cy : 456, version : 0});
+    this._oil.version = 2;
+},
 
 generateBrick : function(descr) {
     this._bricks.push(new Brick(descr));
@@ -94,10 +98,6 @@ generateBarrels : function(descr) {
 
 generateBarrel : function(descr) {
     this._barrel.push(new Barrel(descr));
-},
-
-generateOil : function(descr) {
-    this._oil.push(new Oil(descr));
 },
 
 generateHammer : function(descr) {
@@ -276,6 +276,8 @@ reset : function() {
         this._hammer[i].kill();
     }
 
+    this._oil.version = 2;
+
 },
 
 
@@ -285,6 +287,8 @@ update: function(du) {
     this._kong.update(du);
     this._mario.update(du);
     this._pauline.update(du);
+    this._oil.update(du);
+
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
@@ -332,6 +336,8 @@ render: function(ctx) {
     }
     this._mario.render(ctx);
     this._pauline.render(ctx);
+    this._oil.render(ctx);
+
 }
 
 }

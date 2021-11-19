@@ -25,6 +25,8 @@ function createInitialObjects() {
     entityManager.itsaPauline();
     entityManager.itsaDonkey();
     entityManager.itsaMe();
+    entityManager.makeOil();
+
     entityManager.makeWalkway();
     entityManager.makeLadders();
 
@@ -32,7 +34,6 @@ function createInitialObjects() {
     // being added in the near future
     entityManager.makeBarrels();
   //  entityManager.generateBarrel({cx : 30, cy : 30});
-    entityManager.generateOil({cx : 30, cy : 456});
     entityManager.makeHammers();
 
     
