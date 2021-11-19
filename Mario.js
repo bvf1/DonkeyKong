@@ -136,43 +136,6 @@ Mario.prototype.update = function (du) {
         }
 
     }
-    //walking left
-    if(keys[this.KEY_LEFT]) {
-        if (!this.hasHammer) this.cycleVersions(du, 0.09, 0, 2)
-        else this.cycleVersions(du, 0.09, 6, 8);
-    }
-    //walking right
-    else if(keys[this.KEY_RIGHT]) {
-        if (!this.hasHammer) this.cycleVersions(du, 0.09, 3, 5);
-        
-        else  this.cycleVersions(du, 0.09, 9, 11);
-    }
-
-
-    // stays still
-    if(this.hasHammer !== false && !keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
-        if (this.velX > 0) this.cycleVersions(du, 0.09, 9, 11);
-        else this.cycleVersions(du, 0.09, 6, 8);
-    }
-
-    //climbing
-
-    if ((keys[this.KEY_UP] || keys[this.KEY_DOWN]) && this.climbing)
-    {
-       this.cycleVersions(du, 0.1, 12, 13)
-    }
-/*
-    if(keys[this.KEY_UP] && this.climbing) {
-        this.cycleVersions(du, 0.01, 14, 16)
-    }
-    else if(keys[this.KEY_DOWN] && this.climbing) {
-        this.cycleVersions(du, 0.10, 14, 16)
-    }*/
-
-
-
-    
-
 
    // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     spatialManager.register(this);
@@ -312,6 +275,58 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
     //Climbing max speed
     if (Math.abs(aveVelY) > MAX_SPEED && this.climbing) {
         aveVelY = aveVelY/Math.abs(aveVelY) * MAX_SPEED;
+    }
+
+    if (this.status !== "dying" && !this.climbing && !this.jumping) {
+        //walking left
+        if(accelX < 0) {
+            if (!this.hasHammer) this.cycleVersions(du, 0.09, 0, 2)
+            else this.cycleVersions(du, 0.09, 6, 8);
+        }
+        //walking right
+        else if(accelX > 0) {
+            if (!this.hasHammer) this.cycleVersions(du, 0.09, 3, 5);
+            
+            else  this.cycleVersions(du, 0.09, 9, 11);
+        }
+        else {
+            if (!this.hasHammer && (oldVelX > 0 || this.version === 5)) this.version = 3;
+            else if (!this.hasHammer && (oldVelX < 0 || this.version === 0)) this.version = 2;
+            else if (this.hasHammer && (oldVelX > 0 || this.version === 5 || (this.version >= 9 && this.version <= 11))) {
+                this.cycleVersions(du,0.09,9,11);
+            }
+            else if (this.hasHammer && (oldVelX < 0 || this.version === 0 || (this.version >= 6 && this.version <= 8))) {
+                this.cycleVersions (du,0.09,6,8);
+            }
+        }
+    }
+    else if (this.status !== "dying" && this.climbing) {
+        if (this.velY !== 0) {
+            this.cycleVersions(du, 0.1, 12, 13);
+        }
+        else {
+            this.version = 12;
+        }
+    }
+    else if (this.status !== "dying" && this.jumping) {
+        if (accelX < 0) {
+            if (!this.hasHammer) this.version = 0;
+            else this.cycleVersions(du, 0.09, 6, 8);
+        }
+        else if (accelX > 0) {
+            if (!this.hasHammer) this.version = 5;
+            else  this.cycleVersions(du, 0.09, 9, 11);
+        }
+        else {
+            if (!this.hasHammer && (oldVelX > 0 || this.version === 3)) this.version = 5;
+            else if (!this.hasHammer && (oldVelX < 0 || this.version === 2)) this.version = 0;
+            else if (this.hasHammer && (oldVelX > 0 || this.version === 3 || (this.version >= 9 && this.version <= 11))) {
+                this.cycleVersions(du,0.09,9,11);
+            }
+            else if (this.hasHammer && (oldVelX < 0 || this.version === 2 || (this.version >= 6 && this.version <= 8))) {
+                this.cycleVersions (du,0.09,6,8);
+            }
+        }
     }
 
     //Move Mario Mario
