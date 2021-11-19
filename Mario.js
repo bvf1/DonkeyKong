@@ -143,7 +143,7 @@ Mario.prototype.update = function (du) {
 
     var accelX = this.computeWalk();
     var accelY = 0;
-    
+
     accelY += this.computeClimb();
     
     if (!this.climbing) {
