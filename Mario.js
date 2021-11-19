@@ -52,57 +52,15 @@ Mario.prototype.status = "alive";
 
 var NOMINAL_GRAVITY = 0.12;
 
-Mario.prototype.computeGravity = function () {
-    return NOMINAL_GRAVITY;
-}
-
-var NOMINAL_SPEED = 0.05;
-
-
-Mario.prototype.computeWalk = function () {
-    var accelX = 0;
-
-    if (keys[this.KEY_LEFT]) {
-        accelX -= NOMINAL_SPEED;
-    }
-    if (keys[this.KEY_RIGHT]) {
-        accelX += NOMINAL_SPEED;
-    }
-
-    return accelX;
-}
-
-var JUMP_HEIGHT = 2.8;
-
-Mario.prototype.computeJump = function () {
-    var accelY = 0;
-
-    if (keys[this.KEY_JUMP] && this.grounded && !this.jumping) {
-        accelY += JUMP_HEIGHT;
-        this.jumping = true;
-    }
-    return -accelY;
-}
-
-Mario.prototype.computeClimb = function () {
-    var accelY = 0;
-    if (keys[this.KEY_UP] && this.allowClimb) {
-        accelY -= NOMINAL_SPEED;
-        this.climbing = true;
-    }
-    if (keys[this.KEY_DOWN] && this.allowClimb) {
-        accelY += NOMINAL_SPEED;
-        this.climbing = true;
-    }
-    return accelY;
-}
-
-
-
 Mario.prototype.setPos = function(cx, cy) {
     this.cx = cx;
     this.cy = cy;
 }
+
+Mario.prototype.getRadius = function () {
+    return this._realHeight/2-1;
+}
+
 Mario.prototype.getAliveStatus = function() {
     return this.status === "alive";
 }
@@ -137,6 +95,8 @@ Mario.prototype.newLife = function () {
 }
 Mario.prototype.timer;
 
+//UPDATE & COLLISIONS
+
 Mario.prototype.update = function (du) {
 
     spatialManager.unregister(this);
@@ -149,8 +109,32 @@ Mario.prototype.update = function (du) {
     if (!this.climbing) {
         accelY += this.computeGravity();
     }
-    this.applyAccel(accelX, accelY, du);
+    if (this.status !== "dying") {
+        this.applyAccel(accelX, accelY, du);
+    }
 
+    this.handleCollision();
+
+    if (this.status === "dying") {
+        // shows the different dead pictures
+        this.cycleVersions(du, 0.2, 19, 22);
+        if (this.timer.tick(du)) {
+            // mario is dead
+            this.version = 23;
+            g_stopscreen = true;
+            this.status = "waiting";
+        }
+
+    }
+
+
+   // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    spatialManager.register(this);
+
+}
+
+
+Mario.prototype.handleCollision = function () {
     var collision = this.isColliding();
     if (collision) {
         if (collision[0]) {
@@ -198,27 +182,53 @@ Mario.prototype.update = function (du) {
         this.allowClimb = false;
         this.climbing = false;
     }
+}
 
-    if (this.status === "dying") {
-        // shows the different dead pictures
-        this.cycleVersions(du, 0.2, 19, 22);
-        if (this.timer.tick(du)) {
-            // mario is dead
-            this.version = 23;
-            g_stopscreen = true;
-            this.status = "waiting";
-        }
+//MOVEMENT
 
+Mario.prototype.computeGravity = function () {
+    return NOMINAL_GRAVITY;
+}
+
+var NOMINAL_SPEED = 0.05;
+
+Mario.prototype.computeWalk = function () {
+    var accelX = 0;
+
+    if (keys[this.KEY_LEFT]) {
+        accelX -= NOMINAL_SPEED;
+    }
+    if (keys[this.KEY_RIGHT]) {
+        accelX += NOMINAL_SPEED;
     }
 
-
-   // if (this._isDeadNow) return entityManager.KILL_ME_NOW;
-    spatialManager.register(this);
-
+    return accelX;
 }
-    
 
+var JUMP_HEIGHT = 2.8;
 
+Mario.prototype.computeJump = function () {
+    var accelY = 0;
+
+    if (keys[this.KEY_JUMP] && this.grounded && !this.jumping) {
+        accelY += JUMP_HEIGHT;
+        this.jumping = true;
+    }
+    return -accelY;
+}
+
+Mario.prototype.computeClimb = function () {
+    var accelY = 0;
+    if (keys[this.KEY_UP] && this.allowClimb) {
+        accelY -= NOMINAL_SPEED;
+        this.climbing = true;
+    }
+    if (keys[this.KEY_DOWN] && this.allowClimb) {
+        accelY += NOMINAL_SPEED;
+        this.climbing = true;
+    }
+    return accelY;
+}
 
 var MAX_SPEED = 2.5;
 
@@ -237,6 +247,7 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
         aveVelX = 0;
         this.velX = 0;
     }
+    //Makes mario stop on ladder if not pressing any keys
     if (this.climbing && (accelY === 0 || (oldVelY > 0 && accelY < 0) || (oldVelY < 0 && accelY > 0))) {
         aveVelY = 0;
         this.velY = 0;
@@ -245,25 +256,18 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
     if (Math.abs(aveVelX) > MAX_SPEED) {
         aveVelX = aveVelX/Math.abs(aveVelX) * MAX_SPEED;
     }
+    //Climbing max speed
     if (Math.abs(aveVelY) > MAX_SPEED && this.climbing) {
         aveVelY = aveVelY/Math.abs(aveVelY) * MAX_SPEED;
     }
 
-    var nextX = this.cx + aveVelX * du;
-    var nextY = this.cy + aveVelY * du;
-
-    if (this.grounded && !this.jumping && !this.climbing) {
-        aveVelY = 0;
-        this.velY = 0;
-    }
     //Move Mario Mario
     this.cx += aveVelX * du;
     this.cy += aveVelY * du;
 }
 
-Mario.prototype.getRadius = function () {
-    return this._realHeight/2-1;
-}
+
+//RENDERING
 
 Mario.prototype._draw = function(ctx) {
     
@@ -285,9 +289,6 @@ Mario.prototype._draw = function(ctx) {
 
     
 }
-
-
-
 
 
 Mario.prototype.drawWalking = function(ctx)  {
