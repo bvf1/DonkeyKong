@@ -70,7 +70,7 @@ findEntityInRange: function(posX, posY, radius) {
             if (posY + radius >= pos.posY - size.height/2 &&
                 posX > pos.posX - size.width/2 &&
                 posX < pos.posX + size.width/2 &&
-                posY < pos.posY) {
+                posY + radius < pos.posY) {
                 entitiesInRange[0] = e.entity;
             }
         }

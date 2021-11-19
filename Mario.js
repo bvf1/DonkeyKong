@@ -124,9 +124,9 @@ Mario.prototype.update = function (du) {
 
     var accelX = this.computeWalk();
     var accelY = 0;
-
-    accelY += this.computeJump();
+    
     accelY += this.computeClimb();
+    
     if (!this.climbing) {
         accelY += this.computeGravity();
     }
@@ -189,6 +189,7 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
 
     this.velX += accelX * du;
     this.velY += accelY * du;
+    this.velY += this.computeJump();
     
     var aveVelX = (oldVelX + this.velX) / 2;
     var aveVelY = (oldVelY + this.velY) / 2;
@@ -217,8 +218,8 @@ Mario.prototype.applyAccel = function (accelX, accelY, du) {
         this.velY = 0;
     }
     //Move Mario Mario
-    this.cx += aveVelX;
-    this.cy += aveVelY;
+    this.cx += aveVelX * du;
+    this.cy += aveVelY * du;
 }
 
 Mario.prototype.getRadius = function () {
