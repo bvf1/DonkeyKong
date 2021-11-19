@@ -47,6 +47,7 @@ Barrel.prototype.floor = 5;
 Barrel.prototype.starting = true;
 Barrel.prototype.goDownLadder = false;
 Barrel.prototype.laddering = false;
+Barrel.prototype.ladderTime = 0;
 Barrel.prototype.ladderEnd = false;
 Barrel.prototype.falling = false;
 Barrel.prototype.fallingTime = 0;
@@ -172,6 +173,8 @@ Barrel.prototype.update = function (du) {
     if (this.laddering || this.specialBarrel) {
         if (!this.switch) {this.version = 4; this.switch = true}
         
+        this.ladderTime += du;
+
         this.cycleVersions(du,0.03,4,5);
     }
     else {
@@ -212,7 +215,7 @@ Barrel.prototype.update = function (du) {
             if (!this.laddering) {
                 this.fallingTime += du;
             }
-            if (this.laddering) {
+            if (this.ladderTime > 6*du && this.laddering) {
                 this.ladderEnd = true;
             }
             this.falling = true;
