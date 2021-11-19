@@ -93,7 +93,8 @@ Mario.prototype.newLife = function () {
     this.version = 3;
     entityManager.makeHammers();
     this.reset();
-
+    entityManager._oil.stop();
+    entityManager._kong.allowSpecialBarrel = true;
 
 }
 Mario.prototype.timer;

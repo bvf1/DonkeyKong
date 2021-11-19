@@ -91,10 +91,24 @@ Oil.prototype._draw = function(ctx) {
 }
 
 Oil.prototype.update = function (du) {
-    spatialManager.unregister(this);   
+    spatialManager.unregister(this);  
+    
+    var collision = this.isColliding();
+    if (collision) {
+        //Check collision with brick
+        if (collision[3]) {
+            if (collision[3].tag === "Barrel") { 
+                console.log("collides with oil");
+
+                if (this.version = 2) this.start();
+
+            }
+        }
+    }
 
 
-    this.cycleVersions(du,3,0,1);
+
+    if (this.isLit) this.cycleVersions(du,0.1,0,1);
 
     spatialManager.register(this);   
 
