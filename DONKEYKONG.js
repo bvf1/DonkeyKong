@@ -142,7 +142,6 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
-    if (gameOver === "true") return;
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -172,6 +171,7 @@ function renderSimulation(ctx) {
 
         util.clearCanvas(ctx);
         ctx.fillText("Game Over !", 120, 230);
+        main.gameOver();
     }
 
 
